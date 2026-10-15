@@ -1,0 +1,1027 @@
+{
+  "schema_version": 1,
+  "scope": "30 literature mappings; NOT 30 reproduced algorithms",
+  "created": "2026-10-15",
+  "profiles": [
+    {
+      "id": "P01",
+      "name": "AK-MCS",
+      "year": "2011",
+      "source": "https://doi.org/10.1016/j.strusafe.2011.01.002",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "고정 학습정책의 Kriging/GP; predict_mean, predict_epistemic_var, 입력 미분 제공.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "MCS 후보 전체의 U 최소 또는 EFF 최대. 선택점과 원점수 저장.",
+          "acquisition": "U=abs(mu)/sigma, min; EFF, max를 별도 variant로 등록.",
+          "gradient": "U²의 analytic/autodiff gradient. EFF는 폭 epsilon(x)의 미분까지 포함."
+        },
+        "evaluation": {
+          "spec": "MCS Pf와 적분 COV; U 조건과 표본 정밀도 조건을 구분. 임계값은 variant 설정."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference 최선점으로 시작해 같은 U/EFF를 개선; U가 같을 때 기본적으로 Reference 유지.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "원문별 kernel, DOE, 재학습·종료 수치; 동봉 GP-U는 공통 예제이며 원논문 완전 복제 아님."
+      }
+    },
+    {
+      "id": "P02",
+      "name": "AK-IS",
+      "year": "2013",
+      "source": "https://doi.org/10.1016/j.ress.2012.10.008",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; mean/variance; IS 밀도는 메타모델과 별도 state.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "IS 관련 후보/단계별 selection을 보존; proposal id와 density 저장.",
+          "acquisition": "AK learning 기준; 단계별 원식 확인 후 고정.",
+          "gradient": "점별 GP 기준 gradient + 필요한 log-density gradient."
+        },
+        "evaluation": {
+          "spec": "가중 IS Pf, weight variance/COV, surrogate 오차를 평가."
+        }
+      },
+      "nh_extension": {
+        "spec": "IS proposal을 고정한 채 Reference 점을 추가 최적화. NH 점을 무가중 IS 표본으로 사용하지 않음.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "단계별 정확한 acquisition·support·종료식."
+      }
+    },
+    {
+      "id": "P03",
+      "name": "AK-SYS",
+      "year": "2014",
+      "source": "https://doi.org/10.1016/j.ress.2013.10.010",
+      "problem_kind": "component_system",
+      "modules": {
+        "g": {
+          "adapter": "component_system"
+        },
+        "metamodel": {
+          "spec": "성분별 Kriging; 각 g_k의 별도 데이터 마스크와 모델.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "시스템 논리로 (x, component_id)를 선택.",
+          "acquisition": "시스템·성분 선택 함수; 단순 min U_k로 대체 금지.",
+          "gradient": "성분별 연속 gradient; 시스템 min/max는 piecewise 또는 명시적 proxy."
+        },
+        "evaluation": {
+          "spec": "시스템 indicator로 Pf 평가; 시스템 학습오차와 성분 호출비용 기록."
+        }
+      },
+      "nh_extension": {
+        "spec": "component_id를 고정하고 x만 refine; 최종 시스템 admissibility 재검사.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "시스템별 원 학습식·성분 선택식·종료식."
+      }
+    },
+    {
+      "id": "P04",
+      "name": "AK-SS",
+      "year": "2016",
+      "source": "https://doi.org/10.1016/j.strusafe.2015.12.003",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging + 현재 SS level b_j를 별도 state로 전달.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "현재 SS 수준의 조건부 후보 중 선택; chain/level id 유지.",
+          "acquisition": "수준별 경계 불확실성; 공통 표기는 U_j=abs(mu-b_j)/sigma.",
+          "gradient": "현재 b_j를 고정한 점별 gradient."
+        },
+        "evaluation": {
+          "spec": "SS 조건부 확률 곱, 상관을 반영한 불확실성; 수준 종료와 전체 종료 분리."
+        }
+      },
+      "nh_extension": {
+        "spec": "level을 고정하고 허용 조건부 영역 안에서 추가 탐색. integration chain에는 NH 궤적을 섞지 않음.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "원 단계별 scoring·level transition·종료 수치."
+      }
+    },
+    {
+      "id": "P05",
+      "name": "H learning",
+      "year": "2015",
+      "source": "https://doi.org/10.1016/j.camwa.2015.07.004",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; Gaussian response density 제공.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "H 기준 후보 선택; 원문 line-sampling 결합을 보존.",
+          "acquisition": "경계 응답구간의 -p(y|x) log p(y|x) 적분, max.",
+          "gradient": "적분 경계 epsilon(x) 및 mean/variance의 미분. Bernoulli entropy로 대체 금지."
+        },
+        "evaluation": {
+          "spec": "원 적분법의 Pf·오차를 평가; i.i.d. MCS COV로 통일하지 않음."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference 점에서 H 추가 최대화; H가 음수 가능하므로 log(H) energy 금지.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "구간 폭, 정규화, 후보 생성, stop 원식."
+      }
+    },
+    {
+      "id": "P06",
+      "name": "LIF",
+      "year": "2017",
+      "source": "https://doi.org/10.1016/j.ress.2016.09.003",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; mean/variance 및 필요한 국소 적분정보.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "원 LIF 후보 절차·영역 선별 유지.",
+          "acquisition": "국소 오분류 개선·입력 확률질량을 이용한 LIF; 원식 등록 필요.",
+          "gradient": "내부 적분/국소영역 의존성 포함. 단순 fX*Phi(-U)로 대체 금지."
+        },
+        "evaluation": {
+          "spec": "원 Pf 추정 및 stop; 내부 표본 비용 별도 집계."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference 이후 동일 LIF 추가 최적화; inner quadrature/난수는 iteration 내 고정.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "정확한 LIF 식·방향·반경·적분·종료식."
+      }
+    },
+    {
+      "id": "P07",
+      "name": "REIF / REIF2",
+      "year": "2019",
+      "source": "https://doi.org/10.1016/j.ress.2019.01.014",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; folded-normal 계산에 필요한 mean/variance.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "대표·저불일치·절단 후보의 REIF 또는 REIF2 argmax.",
+          "acquisition": "REIF와 density 보정 REIF2를 서로 다른 variant로 정의.",
+          "gradient": "folded-normal 식과 REIF2 density 미분; 절단영역 제약 유지."
+        },
+        "evaluation": {
+          "spec": "원 reliability estimator 및 truncation/학습 종료를 각각 기록."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference와 같은 variant 및 유효영역에서 refine.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "folded-normal 평균만으로 전체 acquisition 복원 금지; 계수·보정·stop 확인."
+      }
+    },
+    {
+      "id": "P08",
+      "name": "FNEIF",
+      "year": "2020",
+      "source": "https://www.sciencedirect.com/science/article/pii/S0951832019304788",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; mean/variance.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "FNEIF 최대 후보 선택.",
+          "acquisition": "Folded-normal expected improvement, max.",
+          "gradient": "저자 supplementary 원식을 이식한 후 analytic/autodiff와 수치미분 대조."
+        },
+        "evaluation": {
+          "spec": "원 stop와 Pf 정밀도 조건; supplementary 설정 확인."
+        }
+      },
+      "nh_extension": {
+        "spec": "동일 FNEIF를 추가 최대화; REIF 구현을 재사용한 것으로 간주하지 않음.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "FNEIF threshold·전체 식·종료식; supplementary 확보 우선."
+      }
+    },
+    {
+      "id": "P09",
+      "name": "REAK",
+      "year": "2019",
+      "source": "https://doi.org/10.1016/j.ress.2018.10.004",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; 잘못 분류될 가능성과 오류 추정에 필요한 출력.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "유효영역에서 원 enrichment policy 수행.",
+          "acquisition": "점별 criterion과 effective-region 필터를 별도 등록.",
+          "gradient": "점별 score 미분; 현재 effective region은 고정."
+        },
+        "evaluation": {
+          "spec": "오분류에 의한 Pf error estimate를 중심으로 stop. MC 분산과 별도 기록."
+        }
+      },
+      "nh_extension": {
+        "spec": "유효영역 안에서 추가 탐색; 원 error audit용 표본은 유지.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "정확한 점수·effective region update·error bound 구현."
+      }
+    },
+    {
+      "id": "P10",
+      "name": "AK-MCSi",
+      "year": "2018",
+      "source": "https://doi.org/10.1016/j.strusafe.2018.01.002",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; batch 데이터 추가 후 동일 학습정책 적용.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "후보 관리·군집·배치 대표점 선택 유지.",
+          "acquisition": "점별 AK score + batch 선정 규칙을 분리.",
+          "gradient": "점별 score gradient; 군집/대표점 선택 자체는 별도 이산 정책."
+        },
+        "evaluation": {
+          "spec": "Pf/COV·학습 stop 및 배치 비용; 실제 호출수와 wall time 구분."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference 배치 각 seed를 refine하고 중복·군집 제약 재검사.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "군집 가중치·정확한 variant·stop."
+      }
+    },
+    {
+      "id": "P11",
+      "name": "RLCB",
+      "year": "2020",
+      "source": "https://doi.org/10.1007/s00158-020-02622-3",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; mean/variance 및 density weight.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "원 RLCB 선택 및 후보생성 유지.",
+          "acquisition": "Reliability lower confidence bounding; 원식·방향 등록.",
+          "gradient": "mean/variance뿐 아니라 PDF 기반 가중치 미분 포함."
+        },
+        "evaluation": {
+          "spec": "논문의 상대 Pf error 기반 stop와 estimator 사용."
+        }
+      },
+      "nh_extension": {
+        "spec": "iteration의 weight/계수는 고정하고 원 RLCB만 추가 최적화.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "일반 BO의 mu-kappa*sigma로 대체 금지; 정확한 수식·threshold."
+      }
+    },
+    {
+      "id": "P12",
+      "name": "Portfolio allocation",
+      "year": "2023",
+      "source": "https://www.sciencedirect.com/science/article/pii/S0045782523001901",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging; portfolio의 공통 예측정보.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "portfolio가 함수 id를 결정한 뒤 해당 Reference selector 실행.",
+          "acquisition": "여러 learning function + 선택/배분 정책.",
+          "gradient": "선택된 함수의 gradient; 함수 id와 보상 state 고정."
+        },
+        "evaluation": {
+          "spec": "원 Pf/stop 및 portfolio 보상 기록."
+        }
+      },
+      "nh_extension": {
+        "spec": "선택된 acquisition_id를 고정하고 refine. NH 후 정책 업데이트는 실제 관측을 얻은 뒤 수행.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "portfolio 구성·reward·할당식·stop."
+      }
+    },
+    {
+      "id": "P13",
+      "name": "Noisy-model U_N",
+      "year": "2024",
+      "source": "https://arxiv.org/html/2401.10796v1",
+      "problem_kind": "noisy_latent",
+      "modules": {
+        "g": {
+          "adapter": "noisy_latent"
+        },
+        "metamodel": {
+          "spec": "GP; epistemic variance와 observation noise variance를 분리.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "원 후보/SS 및 batch 절차에서 U_N 최대 선택.",
+          "acquisition": "U_N=Phi(-abs(mu)/sigma)-Phi(-abs(mu)*sqrt(sigma²+sigma_noise²)/(sigma*sigma_noise)), max.",
+          "gradient": "noise model과 평균·분산을 고정한 analytic/autodiff; 절댓값 주의."
+        },
+        "evaluation": {
+          "spec": "잠재 deterministic g의 Pf와 추정오차. 물리적 stochastic-output Pf와 구별."
+        }
+      },
+      "nh_extension": {
+        "spec": "원 batch 구조를 유지한 추가 최적화; 반복관측 허용 여부는 실험정책으로 고정.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "후보/cluster·원 종료값; noise가 0인 극한 처리."
+      }
+    },
+    {
+      "id": "P14",
+      "name": "Arbitrary systems",
+      "year": "2024",
+      "source": "https://doi.org/10.1016/j.ress.2024.110150",
+      "problem_kind": "component_system",
+      "modules": {
+        "g": {
+          "adapter": "component_system"
+        },
+        "metamodel": {
+          "spec": "성분 Kriging/PCK; 성분별 학습데이터와 불확실성.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "SS·DBSCAN·성분 sensitivity를 이용하는 원 선택.",
+          "acquisition": "시스템 score + component selection + cluster policy.",
+          "gradient": "component/cluster를 고정한 x-gradient; 논리경계 처리."
+        },
+        "evaluation": {
+          "spec": "arbitrary system indicator·SS Pf·시스템 오차 판단."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference tuple의 이산 항목은 고정, x refine 후 동일 군집·성분 유효성 검사.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "시스템 score·민감도 사용방식·stop 원식."
+      }
+    },
+    {
+      "id": "P15",
+      "name": "AK-MCS-C2",
+      "year": "2026 preprint",
+      "source": "https://arxiv.org/html/2606.20191v1",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Kriging + cross-conformal 구간 [m,M]; calibration state 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "0을 포함하는 구간의 후보 중 (M-m)/2 최대.",
+          "acquisition": "a=(M-m)/2, max, admissible iff m<=0<=M.",
+          "gradient": "quantile/구간 gate가 비매끄러움; exact piecewise 또는 명시적 proxy."
+        },
+        "evaluation": {
+          "spec": "Pf lower=mean(1[M<=0]), upper=mean(1[m<=0]); gap과 적분오차. 보장조건 별도 확인."
+        }
+      },
+      "nh_extension": {
+        "spec": "ambiguous set 제약을 유지해 refine; gate 위반점 배제.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "v1 상하한 부호 문제, 적응 calibration 유효성; 정확한 미분 방식."
+      }
+    },
+    {
+      "id": "P16",
+      "name": "ASVM-MCS",
+      "year": "2017",
+      "source": "https://doi.org/10.1016/j.strusafe.2017.04.006",
+      "problem_kind": "scalar_classification",
+      "modules": {
+        "g": {
+          "adapter": "scalar_classification"
+        },
+        "metamodel": {
+          "spec": "SVM classifier; raw g 저장 후 label 생성. kernel/C/전처리/CV 정책 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "원 경계 근접성·다양성 score로 MCS 후보 선택.",
+          "acquisition": "SVM decision margin과 기존 표본 거리 결합; 원식 필요.",
+          "gradient": "RBF decision gradient + nearest-neighbor 거리의 piecewise gradient."
+        },
+        "evaluation": {
+          "spec": "SVM 실패분류 기반 MCS Pf; 원 learning stop 별도 확인."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference 점을 seed로 원 score 추가 최적화; 기존 NH의 별도 repulsion 추가는 별도 variant.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "정확한 거리 정규화·결합식·원 stop. abs(s)만 쓰는 baseline과 구별."
+      }
+    },
+    {
+      "id": "P17",
+      "name": "SS-SVM",
+      "year": "2011",
+      "source": "https://doi.org/10.1016/j.strusafe.2011.06.001",
+      "problem_kind": "scalar_classification",
+      "modules": {
+        "g": {
+          "adapter": "scalar_classification"
+        },
+        "metamodel": {
+          "spec": "SS 수준별 label을 쓰는 SVM; margin 제공, GP variance는 없음.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "SS level별 조건부 후보 및 원 adaptive classifier 선택.",
+          "acquisition": "원 SVM enrichment criterion; 수준별 정의 필요.",
+          "gradient": "고정 b_j와 classifier의 입력 gradient; 원식 미확인 시 실행 보류."
+        },
+        "evaluation": {
+          "spec": "SS 조건부 확률과 상관된 표본오차; 수준/전체 종료."
+        }
+      },
+      "nh_extension": {
+        "spec": "조건부 영역과 level 유지 후 refine; HMC-SS sampler와 NH optimizer 분리.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "수준별 selection·threshold·stop."
+      }
+    },
+    {
+      "id": "P18",
+      "name": "Sequential adaptive SVR",
+      "year": "2020",
+      "source": "https://doi.org/10.1016/j.ress.2020.106948",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "SVR regression; kernel/regularization/epsilon 및 고정 tuning protocol.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "MCS 후보를 단계적으로 선별한 뒤 원 최종선택.",
+          "acquisition": "stage filter + 최종 score; 표준 GP-U로 치환 금지.",
+          "gradient": "최종 scalar score의 gradient; stage 조건은 고정/유효성 검사."
+        },
+        "evaluation": {
+          "spec": "SVR 예측 sign으로 Pf; 원 학습 종료식 확인."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference가 결정한 stage/영역 안에서 x 추가 최적화.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "각 stage·최종 score·stop 수식."
+      }
+    },
+    {
+      "id": "P19",
+      "name": "Bayesian SVR: Cheng–Lu",
+      "year": "2021",
+      "source": "https://doi.org/10.1016/j.ress.2020.107286",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "Bayesian LS-SVR/epsilon-SVR의 원 variant; 예측 mean/variance.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "원 candidate rule 및 Bayesian learning score.",
+          "acquisition": "Bayesian SVR의 원 acquisition; variance 제공만으로 U로 단정 금지.",
+          "gradient": "원 Bayesian predictive moments와 score의 미분."
+        },
+        "evaluation": {
+          "spec": "원 Pf 계산법·분류오차/종료 기준."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference와 같은 posterior/variant에서 refine.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "learning 식·candidate law·정확한 training/stop."
+      }
+    },
+    {
+      "id": "P20",
+      "name": "ABSVR: Wang et al.",
+      "year": "2021",
+      "source": "https://doi.org/10.1016/j.cma.2021.114172",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "논문 고유 Bayesian SVR; 19번과 별도 model/training profile.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "원 ABSVR learning 및 후보선정 구현.",
+          "acquisition": "원 learning function; PDF 포함 여부와 계수 확정 필요.",
+          "gradient": "posterior·score 미분; 확인 전 구현 차단."
+        },
+        "evaluation": {
+          "spec": "원 reliability estimator 및 수렴판정."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference 출력 이후 추가 optimizer만 연결.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "accepted manuscript의 score·학습정책·stop 확보."
+      }
+    },
+    {
+      "id": "P21",
+      "name": "Bootstrap PCE",
+      "year": "2018",
+      "source": "https://doi.org/10.1016/j.strusafe.2018.06.003",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "sparse PCE bootstrap ensemble; 기저·차수·희소선택·bootstrap 정책 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "FBR 최소 및 원 batch 군집 규칙.",
+          "acquisition": "FBR=abs(B_safe-B_fail)/B=abs(1-2*p_vote), min.",
+          "gradient": "hard vote는 미분 거의 0; smooth proxy gradient 사용 여부 명시."
+        },
+        "evaluation": {
+          "spec": "ensemble 실패분류/Pf와 원 bootstrap stopping criterion."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference batch seed에서 proxy로 이동하되 원 FBR로 accept; 동률은 Reference 유지.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "원 stop·군집 설정; proxy-NH는 원 score의 정확한 gradient 방법 아님."
+      }
+    },
+    {
+      "id": "P22",
+      "name": "EIFPE-PCE",
+      "year": "2020",
+      "source": "https://doi.org/10.1002/nme.6351",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "PCE basis covariance 기반 Gaussian prior/posterior; mean=PCE 및 variance.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "EIFPE가 큰 후보 선택; 원 후보분포 확인.",
+          "acquisition": "Expected indicator function prediction error, max; variance-bias 구성.",
+          "gradient": "variance/bias terms 모두 미분; 동적 weight는 iteration 내 고정."
+        },
+        "evaluation": {
+          "spec": "원 Pf 및 accuracy/종료 지표."
+        }
+      },
+      "nh_extension": {
+        "spec": "동일 EIFPE 위에서 추가 최대화; expected improvement로 오기하지 않음.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "전체 EIFPE·bias estimate·weight·stop."
+      }
+    },
+    {
+      "id": "P23",
+      "name": "Active sparse PCE systems",
+      "year": "2020",
+      "source": "https://doi.org/10.1016/j.ress.2020.107025",
+      "problem_kind": "component_system",
+      "modules": {
+        "g": {
+          "adapter": "component_system"
+        },
+        "metamodel": {
+          "spec": "BCS sparse PCE; 성분/system posterior와 기저선정 정책.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "시스템 복합 learning으로 점/성분 선택.",
+          "acquisition": "논문의 composite learning function.",
+          "gradient": "PCE polynomial gradient + system piecewise 처리."
+        },
+        "evaluation": {
+          "spec": "시스템 Pf와 원 수렴기준; 성분 호출 마스크 기록."
+        }
+      },
+      "nh_extension": {
+        "spec": "성분 선택 보존 후 위치 추가 최적화.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "시스템 score·normalization·후보·stop."
+      }
+    },
+    {
+      "id": "P24",
+      "name": "PAS-PCE",
+      "year": "2022",
+      "source": "https://www.sciencedirect.com/science/article/abs/pii/S0951832022003726",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "prediction-oriented sparse PCE; 원 기저선택/회귀 알고리즘 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "prediction-oriented optimality criterion으로 후보 선택.",
+          "acquisition": "예측용 optimality 및 국소 불확실성 기준; 전체 식 확인.",
+          "gradient": "현재 design matrix/기저 고정 후 후보 위치에 대한 미분."
+        },
+        "evaluation": {
+          "spec": "PCE sign 기반 Pf와 원 adaptive design stop."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference point를 refine; virtual design update는 실제 g 호출 없이 수행.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "정확한 optimality·선택방향·matrix update·stop."
+      }
+    },
+    {
+      "id": "P25",
+      "name": "Enhanced bPCE",
+      "year": "2024",
+      "source": "https://doi.org/10.1016/j.strusafe.2024.102467",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "bootstrap sparse PCE; ensemble 및 기저 선택 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "오분류 가능성과 joint PDF를 반영한 원 선택.",
+          "acquisition": "misclassification + PDF의 논문 고유 결합.",
+          "gradient": "hard vote + density; proxy를 사용하면 별도 variant."
+        },
+        "evaluation": {
+          "spec": "원 bootstrap Pf/stop; MC 정밀도 분리."
+        }
+      },
+      "nh_extension": {
+        "spec": "동일 density 및 원 score로 accept; 임의 단순 곱으로 변경 금지.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "정확한 결합·정규화·stop."
+      }
+    },
+    {
+      "id": "P26",
+      "name": "AL-SPCE",
+      "year": "2025/2026",
+      "source": "https://arxiv.org/html/2507.04553v1",
+      "problem_kind": "stochastic_response",
+      "modules": {
+        "g": {
+          "adapter": "stochastic_response"
+        },
+        "metamodel": {
+          "spec": "stochastic PCE; 조건부 failure s(x), 계수 불확실성 sample 제공.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "재표집 MCS 후보 + weighted K-medoids 및 cluster별 최댓점.",
+          "acquisition": "a=fX(x)*Var_ep[s_hat(x)], max.",
+          "gradient": "density와 계수표본 기반 variance의 gradient; 계수 draws 고정."
+        },
+        "evaluation": {
+          "spec": "Pf=E_X[s_hat(X)]를 고정 적분풀에서 계산; epistemic 오류와 적분 SE 분리."
+        }
+      },
+      "nh_extension": {
+        "spec": "각 cluster seed를 refine; cluster/중복 constraints 유지. 원 s 분산 사용.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "원 stop·batch 수치; s(1-s)를 epistemic variance로 쓰지 않음."
+      }
+    },
+    {
+      "id": "P27",
+      "name": "PC-Kriging",
+      "year": "2016/2017",
+      "source": "https://doi.org/10.1061/AJRUA6.0000870",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "PCE trend + GP residual; 기저선정·kernel fitting protocol 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "AK-MCS형 learning을 PCK 예측으로 수행.",
+          "acquisition": "U/EFF 등 선택한 variant의 원식.",
+          "gradient": "PCE trend와 GP residual의 미분 모두 포함."
+        },
+        "evaluation": {
+          "spec": "PCK 기반 MCS Pf·learning stop·COV."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference 후 동일 PCK posterior의 score 추가 최적화.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "PCK variant 및 원 학습/종료 설정."
+      }
+    },
+    {
+      "id": "P28",
+      "name": "MC-dropout AL",
+      "year": "2025",
+      "source": "https://doi.org/10.1016/j.ress.2025.111169",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "dropout NN; architecture/optimizer/epoch·early-stop·마스크 수 정책 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "논문 고유 불확실성 learning; input candidate law 확인 필요.",
+          "acquisition": "원 acquisition 미확인; U라고 추정하지 않음.",
+          "gradient": "iteration 동안 dropout masks 고정 후 input autodiff."
+        },
+        "evaluation": {
+          "spec": "논문의 두 convergence criteria 및 Pf estimator 확인."
+        }
+      },
+      "nh_extension": {
+        "spec": "Reference와 NH가 동일 masks·모델 snapshot 사용; 진단 resampling은 별도 기록.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "input pool·acquisition·두 stop 식·training settings."
+      }
+    },
+    {
+      "id": "P29",
+      "name": "DBAL time-variant",
+      "year": "2026",
+      "source": "https://doi.org/10.1007/s00158-026-04351-5",
+      "problem_kind": "time_trajectory",
+      "modules": {
+        "g": {
+          "adapter": "time_trajectory"
+        },
+        "metamodel": {
+          "spec": "BDNN; g(x,t) 또는 trajectory output 모델, posterior draws 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "예측 극값점·예측 실패점에서 batch 대표점 선택.",
+          "acquisition": "대표점 score + trajectory/time selection.",
+          "gradient": "시간 index를 고정한 x-gradient 또는 연속 시간 joint variant 구분."
+        },
+        "evaluation": {
+          "spec": "Pf(T)=P(min_t g(X,t)<=0); confidence stop와 trajectory MCS."
+        }
+      },
+      "nh_extension": {
+        "spec": "기본형은 time_id 고정 후 x refine; joint time optimization은 별도 변경.",
+        "placement": "after_reference_selection",
+        "status": "proposed_extension"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "대표점 score·시간 discretization·confidence stop·model training."
+      }
+    },
+    {
+      "id": "P30",
+      "name": "Weighted-sampling DNN",
+      "year": "2020",
+      "source": "https://doi.org/10.1016/j.ymssp.2020.106684",
+      "problem_kind": "scalar_deterministic",
+      "modules": {
+        "g": {
+          "adapter": "scalar_deterministic"
+        },
+        "metamodel": {
+          "spec": "deterministic DNN; BNN variance 없음; 학습정책 고정.",
+          "training_policy": "fixed_protocol_not_fixed_fitted_parameters"
+        },
+        "adaptive": {
+          "reference": "원 weight에 따른 확률적 표본선정; argmax로 바꾸지 않음.",
+          "acquisition": "sampling weight와 분포; 최적화 score가 존재하는지 확인.",
+          "gradient": "원 weight 미분이 가능하면 이동용으로 사용 가능하나 정책 변화 발생."
+        },
+        "evaluation": {
+          "spec": "DNN Pf 및 원 수렴기준."
+        }
+      },
+      "nh_extension": {
+        "spec": "기본 공정 비교군은 NH 비활성. weight-optimization hybrid는 별도 제안 variant로만 허용.",
+        "placement": "after_reference_selection",
+        "status": "not_equivalent_to_reference"
+      },
+      "implementation": {
+        "status": "specification_only",
+        "paper_reproduction_verified": false,
+        "unverified": "weight·stop 원식; NH 후 표본분포가 원 Reference와 달라짐."
+      }
+    }
+  ]
+}
