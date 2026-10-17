@@ -10,13 +10,14 @@ class Problem:
         self.kind = cfg["type"]
         self.d = int(cfg.get("dimension", 2))
         self.beta = float(cfg.get("beta", 2.5))
-        self.bound = float(cfg.get("search_bound", 5.0))
+        bound = cfg.get("search_bound", 5.0)
+        self.bound = math.inf if bound is None else float(bound)
         if self.d < 1 or self.bound <= 0:
             raise ValueError("dimension and search_bound must be positive")
-        if self.kind not in ("linear_normal", "four_branch"):
+        if self.kind not in ("linear_normal", "four_branch", "rastrigin"):
             raise ValueError("Unknown problem: " + self.kind)
-        if self.kind == "four_branch" and self.d != 2:
-            raise ValueError("four_branch requires dimension=2")
+        if self.kind in ("four_branch", "rastrigin") and self.d != 2:
+            raise ValueError(f"{self.kind} requires dimension=2")
         self.target = "P(g(X)<=0), X~N(0,I); search bound does not truncate integration"
 
     def sample(self, rng, n, search=False):
@@ -37,6 +38,8 @@ class Problem:
     def g(self, x):
         if self.kind == "linear_normal":
             return self.beta - sum(x) / math.sqrt(self.d)
+        if self.kind == "rastrigin":
+            return 10 - sum(v*v - 5*math.cos(2*math.pi*v) for v in x)
         a, b = x
         return min(3 + .1*(a-b)**2 - (a+b)/math.sqrt(2),
                    3 + .1*(a-b)**2 + (a+b)/math.sqrt(2),

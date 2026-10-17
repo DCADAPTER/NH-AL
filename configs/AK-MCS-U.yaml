@@ -1,62 +1,86 @@
-{
-  "profile": "metamodel_demo",
-  "mode": "reference",
-  "seed": 20261015,
-  "output": "runs/Kriging_GP",
-  "problem": {
-    "factory": "g:Problem",
-    "type": "linear_normal",
-    "dimension": 2,
-    "beta": 2.5,
-    "search_bound": 5
-  },
-  "initial_design": {
-    "size": 16,
-    "method": "normal_rejection_in_search_domain"
-  },
-  "metamodel": {
-    "optimizer_restarts": 0,
-    "amplitude": 1,
-    "optimize": true,
-    "lengthscale": 1.2,
-    "plugin": "gp",
-    "nugget": 1e-08,
-    "seed": 20261015
-  },
-  "acquisition": {
-    "factory": "adaptive:UAcquisition",
-    "type": "U",
-    "direction": "min",
-    "gradient": "analytic_U_squared"
-  },
-  "sampling": {
-    "factory": "adaptive:PoolSelector",
-    "pool_size": 256,
-    "min_distance": 1e-06
-  },
-  "nh": {
-    "factory": "nh:NestedHamiltonianPrototype",
-    "status": "illustrative_not_verified_user_NH",
-    "dt": 0.03,
-    "steps": 15,
-    "max_paths": 4,
-    "max_depth": 2,
-    "max_retries": 6,
-    "mass": 1,
-    "temperature": 0.2,
-    "energy_tolerance": 0.001
-  },
-  "evaluation": {
-    "factory": "evaluation:MCEvaluation",
-    "integration_size": 1500,
-    "audit_size": 256,
-    "max_true_calls": 22,
-    "min_audit_u": 2,
-    "max_mc_cov": 0.2,
-    "stop_status": "common_demo_heuristic_not_paper_exact"
-  },
-  "reference": {
-    "name": "Kriging_GP",
-    "implementation": "method_demo_not_paper_reproduction"
-  }
-}
+# P01: Echard, Gayton & Lemaire (2011), AK-MCS-U, Example 2 (modified Rastrigin).
+# Checked against supplied PDF: pp.147-150, Eq.(6)-(13), Table 1; pp.151-152, Eq.(18), Table 4.
+profile: metamodel_demo
+mode: reference
+seed: 20261015
+output: runs/AK-MCS-U
+reference:
+  id: P01
+  name: AK-MCS-U
+  doi: 10.1016/j.strusafe.2011.01.002
+  source_pdf: 'C:/Users/dhehr/Documents/GitHub/NH-AL/citations/P01 AK-MCS-U.pdf'
+  implementation: ordinary_kriging_ak_mcs_u_user_design
+  kriging_equations_verified: true
+  paper_reproduction_verified: false
+  paper_example:
+    section: '4.2, Eq.(18), Table 4'
+    mc_size: 60000
+    reported_pf: 0.0734
+    reported_ak_mcs_u_calls: 416
+  deviations:
+    - User requests Optimal LHD with 10 points instead of random selection from S.
+    - User requests initial MC size 1000000 and increments of 100000.
+    - Python uses L-BFGS-B; the paper uses MATLAB DACE.
+    - Theta start, bounds and numerical regularization are implementation choices not specified in the paper.
+    - Seed, call/population caps and optional NH are framework settings.
+problem:
+  factory: g:Problem
+  type: rastrigin
+  dimension: 2
+  search_bound: null
+initial_design:
+  size: 10                            # Configurable number of initial true evaluations
+  method: optimal_lhd
+  seed: 20261026                      # Independent from NH and MC RNG streams
+  restarts: 8
+  iterations: 2000
+  input_file: null                    # Replay: designs/rastrigin_olhd10_seed20261026.json
+metamodel:
+  factory: metamodels.ordinary_kriging:OrdinaryKriging
+  # Eq.(6): exp(-sum(theta_j * delta_j^2)); constant GLS trend, profile MLE.
+  # theta is in sample-standardized input coordinates (DACE convention).
+  theta: [1.0, 1.0]                   # Not specified in original paper
+  theta_bounds: [0.001, 1000.0]       # Not specified in original paper
+  nugget: 1.0e-12                    # Numerical regularization, not observation noise
+  optimize: true
+  optimizer_restarts: 2
+  batch_size: 4096
+acquisition:
+  factory: adaptive:UAcquisition
+  type: U
+  direction: min
+sampling:
+  factory: adaptive:BatchedPoolSelector
+  population: integration
+  pool_size: 1000000                 # Unused when population=integration
+  min_distance: 1.0e-6
+nh:
+  factory: nh:NestedHamiltonianPrototype
+  status: illustrative_not_verified_user_NH
+  dt: 0.03
+  steps: 15
+  max_paths: 4
+  max_depth: 1                       # Parent + terminal local-search children
+  max_retries: 6
+  mass: 1
+  temperature: 0.2
+  energy_tolerance: 0.001
+  child:
+    method: lbfgsb                   # hamiltonian for the existing comparison variant
+    radius: 0.5                      # Half-width in input coordinates, centered at each trough
+    maxiter: 30
+    maxfun: 80                       # Hard cap on child energy/gradient evaluation pairs
+    maxls: 20
+    ftol: 1.0e-12
+    gtol: 1.0e-6
+evaluation:
+  factory: evaluation:PluginMCEvaluation
+  integration_size: 1000000
+  audit_size: 1                      # Unused by the population stopping plugin
+  max_true_calls: 500                # Operational cap; not a convergence condition
+  population_increment: 100000
+  max_population_size: 2000000       # Allows expansion beyond the initial million
+  stop:
+    factory: stop.AK-MCS-U:Stop
+    min_u: 2.0                       # Table 1
+    max_mc_cov: 0.05                  # Stage 8, Eq.(13)

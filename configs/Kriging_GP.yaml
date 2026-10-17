@@ -1,0 +1,62 @@
+{
+  "profile": "metamodel_demo",
+  "mode": "reference",
+  "seed": 20261015,
+  "output": "runs/Kriging_GP",
+  "problem": {
+    "factory": "g:Problem",
+    "type": "linear_normal",
+    "dimension": 2,
+    "beta": 2.5,
+    "search_bound": 5
+  },
+  "initial_design": {
+    "size": 16,
+    "method": "normal_rejection_in_search_domain"
+  },
+  "metamodel": {
+    "optimizer_restarts": 0,
+    "amplitude": 1,
+    "optimize": true,
+    "lengthscale": 1.2,
+    "plugin": "gp",
+    "nugget": 1e-08,
+    "seed": 20261015
+  },
+  "acquisition": {
+    "factory": "adaptive:UAcquisition",
+    "type": "U",
+    "direction": "min",
+    "gradient": "analytic_U_squared"
+  },
+  "sampling": {
+    "factory": "adaptive:PoolSelector",
+    "pool_size": 256,
+    "min_distance": 1e-06
+  },
+  "nh": {
+    "factory": "nh:NestedHamiltonianPrototype",
+    "status": "illustrative_not_verified_user_NH",
+    "dt": 0.03,
+    "steps": 15,
+    "max_paths": 4,
+    "max_depth": 2,
+    "max_retries": 6,
+    "mass": 1,
+    "temperature": 0.2,
+    "energy_tolerance": 0.001
+  },
+  "evaluation": {
+    "factory": "evaluation:MCEvaluation",
+    "integration_size": 1500,
+    "audit_size": 256,
+    "max_true_calls": 22,
+    "min_audit_u": 2,
+    "max_mc_cov": 0.2,
+    "stop_status": "common_demo_heuristic_not_paper_exact"
+  },
+  "reference": {
+    "name": "Kriging_GP",
+    "implementation": "method_demo_not_paper_reproduction"
+  }
+}

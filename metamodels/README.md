@@ -135,3 +135,17 @@ combinations before g, and all four YAMLs in Reference/NH modes.
 - [NumPy HermiteE basis](https://numpy.org/doc/stable/reference/generated/numpy.polynomial.hermite_e.hermevander.html)
 - [Blundell et al., Weight Uncertainty in Neural Network (2015)](https://proceedings.mlr.press/v37/blundell15.html)
 
+
+
+## Paper P01 ordinary Kriging factory
+
+`factory: metamodels.ordinary_kriging:OrdinaryKriging` selects the P01 equations
+(constant GLS trend, anisotropic Gaussian correlation, profile MLE and BLUP MSE,
+including trend-estimation uncertainty). Parameters: theta (positive scalar/vector),
+theta_bounds ([lower, upper]), nugget (nonnegative numerical regularization),
+optimize (boolean), optimizer_restarts, batch_size and seed. Coordinates and targets
+use sample-standard-deviation scaling. theta is in those scaled coordinates.
+SciPy L-BFGS-B replaces MATLAB DACE's optimizer; no identical numerical trajectory
+is promised. The existing registry name gp continues to select KrigingGP.
+`predict_moments(X)` is an optional batched mean/epistemic-variance API, used by
+population evaluation; the required single-input Prediction contract is unchanged.

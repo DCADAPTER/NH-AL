@@ -1,12 +1,17 @@
 """Surrogate Pf integration and explicit stopping contracts; no true g calls."""
 import math
+import importlib
 import time
 from metamodels.contracts import CompatibilityError
 
 
 def _mc_metrics(model, integration):
     field = "mean" if "mean" in model.capabilities else "decision_function"
-    failures = sum(model.predict(x).require(field) <= 0 for x in integration)
+    if field == "mean" and callable(getattr(model, "predict_moments", None)):
+        mean, _ = model.predict_moments(integration)
+        failures = int((mean <= 0).sum())
+    else:
+        failures = sum(model.predict(x).require(field) <= 0 for x in integration)
     n = len(integration)
     pf = failures / n
     se = math.sqrt(pf * (1 - pf) / n)
@@ -59,4 +64,44 @@ class MCEvaluation(BudgetMCEvaluation):
         reason = "converged_audit_heuristic" if converged else ("budget_exhausted" if budget else "continue")
         return {**metrics, "audit_min_u": audit_min, "converged": converged,
                 "stop": converged or budget, "stop_reason": reason,
+                "evaluation_seconds": time.perf_counter() - start}
+
+
+class PluginMCEvaluation(BudgetMCEvaluation):
+    """Compute Pf and route method-specific convergence to stop.<name>:Stop.
+
+    A plugin declares capabilities and implements evaluate(model, acquisition,
+    population, metrics). It returns stop/converged/stop_reason and optionally
+    expand_population. Resource budgets remain the evaluator's responsibility.
+    """
+    def __init__(self, cfg, integration, audit):
+        super().__init__(cfg, integration, audit)
+        from metamodels.base import integer
+        spec = cfg["stop"]
+        module, name = spec["factory"].split(":")
+        self.stop_plugin = getattr(importlib.import_module(module), name)(spec)
+        if not callable(getattr(self.stop_plugin, "evaluate", None)):
+            raise CompatibilityError("Stop plugin must implement evaluate()")
+        self.required_capabilities = self.stop_plugin.required_capabilities
+        self.supported_acquisition_kinds = self.stop_plugin.supported_acquisition_kinds
+        self.requires_shared_population = getattr(self.stop_plugin, "requires_shared_population", False)
+        self.population_increment = integer(cfg["population_increment"], "population_increment")
+        self.max_population_size = integer(cfg["max_population_size"], "max_population_size")
+        if not integration or len(integration) > self.max_population_size:
+            raise ValueError("Require 0 < integration_size <= max_population_size")
+
+    def evaluate(self, model, acquisition, n_calls):
+        if acquisition.kind not in self.supported_acquisition_kinds:
+            raise CompatibilityError("Stop plugin does not support this acquisition")
+        start = time.perf_counter()
+        metrics = _mc_metrics(model, self.integration)
+        decision = self.stop_plugin.evaluate(model, acquisition, self.integration, metrics)
+        decision.setdefault("expand_population", False)
+        if not decision["converged"]:
+            if n_calls >= self.cfg["max_true_calls"]:
+                decision.update(stop=True, expand_population=False, stop_reason="budget_exhausted")
+            elif decision["expand_population"] and len(self.integration) >= self.max_population_size:
+                decision.update(stop=True, expand_population=False, stop_reason="mc_population_limit")
+        return {**metrics, **decision, "population_size": len(self.integration),
+                "stop_plugin": self.cfg["stop"]["factory"],
                 "evaluation_seconds": time.perf_counter() - start}

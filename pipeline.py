@@ -10,6 +10,7 @@ from pathlib import Path
 
 from adaptive import accept_refinement
 from g import Evaluator
+from initial_design import initial_design
 from metamodels import Metamodel, create_metamodel, validate_pipeline
 
 ROOT = Path(__file__).resolve().parent
@@ -52,6 +53,8 @@ class Pipeline:
     integration: list
     audit: list
     preparation_seconds: float
+    initial_points: list
+    initial_metadata: dict
 
     def run(self, out):
         """Execute this validated combination; only the oracle calls true g."""
@@ -66,9 +69,13 @@ class Pipeline:
         (out/"effective_config.json").write_text(json.dumps(dict(cfg,mode=mode),indent=2),encoding="utf-8")
         seed=int(cfg["seed"])
         oracle=Evaluator(problem,out/"g_calls.jsonl")
-        initial=int(cfg["initial_design"]["size"])
-        X=problem.sample(random.Random(seed+11),initial,search=True)
+        X = copy.deepcopy(self.initial_points)
+        # Save coordinates BEFORE true g calls, even if an initial evaluation fails.
+        design_record = dict(self.initial_metadata, X=X)
+        (out/"initial_design.json").write_text(json.dumps(design_record, indent=2),encoding="utf-8")
         Y=[oracle.evaluate(x,0,"initial") for x in X]
+        design_record["Y"] = list(Y)
+        (out/"initial_design.json").write_text(json.dumps(design_record, indent=2),encoding="utf-8")
         records=[]
         totals={"fit_seconds":0.0,"evaluation_seconds":0.0,"candidate_seconds":0.0,"reference_seconds":0.0,
                 "nh_seconds":0.0,"rescore_seconds":0.0,"sampling_score_points":0,
@@ -76,6 +83,7 @@ class Pipeline:
         # Write actual shared integration/audit inputs for reproducibility.
         (out/"fixed_samples.json").write_text(json.dumps({"integration":integration,"audit":audit}),encoding="utf-8")
         iteration=0
+        population_rng = random.Random(seed+44)
         while True:
             t=time.perf_counter()
             model.fit(X,Y)
@@ -85,17 +93,26 @@ class Pipeline:
             self.acquisition = factory(cfg["acquisition"], model)
             acquisition = self.acquisition
             validate_pipeline(model, acquisition, evaluator, refiner)
-            metrics=evaluator.evaluate(model,acquisition,oracle.n_calls)
-            totals["evaluation_seconds"]+=metrics["evaluation_seconds"]
-            metrics.update(iteration=iteration,n_true_calls=oracle.n_calls,model_snapshot=model.snapshot,
-                           model_capabilities=sorted(model.capabilities),training_log=dict(model.training_log))
-            with (out/"evaluation.jsonl").open("a",encoding="utf-8") as f:
-                f.write(json.dumps(metrics,allow_nan=False)+"\n")
+            while True:
+                metrics=evaluator.evaluate(model,acquisition,oracle.n_calls)
+                totals["evaluation_seconds"]+=metrics["evaluation_seconds"]
+                metrics.update(iteration=iteration,n_true_calls=oracle.n_calls,model_snapshot=model.snapshot,
+                               model_capabilities=sorted(model.capabilities),training_log=dict(model.training_log))
+                with (out/"evaluation.jsonl").open("a",encoding="utf-8") as f:
+                    f.write(json.dumps(metrics,allow_nan=False)+"\n")
+                if metrics["stop"] or not metrics.get("expand_population", False):
+                    break
+                count = min(evaluator.population_increment,
+                            evaluator.max_population_size - len(integration))
+                integration.extend(problem.sample(population_rng, count))
+                # Recheck U and Pf on the enlarged population without fitting or calling g.
+                (out/"mc_population.json").write_text(json.dumps(integration),encoding="utf-8")
             if metrics["stop"]:
                 break
             # Independent RNG streams mean NH draws cannot change reference pools.
             t=time.perf_counter()
-            candidates=problem.sample(random.Random(seed+10000+iteration),cfg["sampling"]["pool_size"],search=True)
+            candidates = (integration if cfg["sampling"].get("population") == "integration" else
+                          problem.sample(random.Random(seed+10000+iteration),cfg["sampling"]["pool_size"],search=True))
             candidate_seconds=time.perf_counter()-t
             t=time.perf_counter()
             before=(acquisition.score_points,acquisition.energy_points,acquisition.gradient_points)
@@ -175,19 +192,36 @@ def prepare(cfg, mode):
     integration = problem.sample(random.Random(seed+22), cfg["evaluation"]["integration_size"])
     audit = problem.sample(random.Random(seed+33), cfg["evaluation"]["audit_size"], search=True)
     evaluator = factory(cfg["evaluation"], cfg["evaluation"], integration, audit)
+    if getattr(evaluator, "requires_shared_population", False):
+        if cfg["sampling"].get("population") != "integration":
+            raise ValueError("Stop plugin requires sampling.population=integration")
+        if problem.bound != float("inf"):
+            raise ValueError("Shared MC population requires problem.search_bound=null (untruncated)")
+    method = cfg["initial_design"].get("method", "normal_rejection_in_search_domain")
+    if method not in ("random_from_mc_population", "normal_rejection_in_search_domain", "optimal_lhd"):
+        raise ValueError("Unsupported initial_design.method")
+    if method == "random_from_mc_population" and initial > len(integration):
+        raise ValueError("Initial design exceeds MC population")
     validate_pipeline(model, acquisition, evaluator, refiner, problem)
     for name in ("select", "valid"):
         if not callable(getattr(selector, name, None)):
             raise ValueError(f"Sampling adapter must implement {name}()")
+    initial_points, initial_metadata = initial_design(cfg["initial_design"], problem, seed, integration)
     return Pipeline(cfg, mode, problem, model, selector, refiner, acquisition,
-                    evaluator, integration, audit, time.perf_counter() - start)
+                    evaluator, integration, audit, time.perf_counter() - start,
+                    initial_points, initial_metadata)
 
 def prepare_runs(cfg, mode):
     """Validate every requested mode before any run can consume true g budget."""
     if mode not in ("reference", "nh", "paired"):
         raise ValueError("Unsupported mode")
     modes = ("reference", "nh") if mode == "paired" else (mode,)
-    return {name: prepare(cfg, name) for name in modes}
+    pipelines = {name: prepare(cfg, name) for name in modes}
+    if mode == "paired":
+        # Copy exact coordinates; do not rely solely on matching RNG seeds.
+        pipelines["nh"].initial_points = copy.deepcopy(pipelines["reference"].initial_points)
+        pipelines["nh"].initial_metadata = copy.deepcopy(pipelines["reference"].initial_metadata)
+    return pipelines
 
 
 def run(cfg, mode, out):

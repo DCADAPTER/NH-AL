@@ -415,7 +415,7 @@ Batch, portfolio, system, time-dependent 방법은 이산 선택을 고정한 x-
 | 1. g(x) | `noisy_latent` adapter. §4의 실제 평가·저장 계약 적용. |
 | 2. 메타모델 | GP; epistemic variance와 observation noise variance를 분리. |
 | 3-A. Reference 샘플링 | 원 후보/SS 및 batch 절차에서 U_N 최대 선택. |
-| 3-B. Acquisition | $U_N(x)=\Phi\!\left(-\frac{|\mu(x)|}{\sigma(x)}\right)-\Phi\!\left(-\frac{|\mu(x)|\sqrt{\sigma^2(x)+\sigma_{\mathrm{noise}}^2(x)}}{\sigma(x)\sigma_{\mathrm{noise}}(x)}\right)$, max. |
+| 3-B. Acquisition | $U_N(x)=\Phi\!\left(-\frac{\|\mu(x)\|}{\sigma(x)}\right)-\Phi\!\left(-\frac{\|\mu(x)\|\sqrt{\sigma^2(x)+\sigma_{\mathrm{noise}}^2(x)}}{\sigma(x)\sigma_{\mathrm{noise}}(x)}\right)$, max. |
 | 3-C. Gradient | noise model과 평균·분산을 고정한 analytic/autodiff; 절댓값 주의. |
 | 3-D. NH 추가 최적화 **[제안]** | 원 batch 구조를 유지한 추가 최적화; 반복관측 허용 여부는 실험정책으로 고정. |
 | 4. 평가·종료 | 잠재 deterministic g의 Pf와 추정오차. 물리적 stochastic-output Pf와 구별. |

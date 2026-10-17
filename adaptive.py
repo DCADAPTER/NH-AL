@@ -21,6 +21,14 @@ class UAcquisition:
         prediction = self.model.predict(x)
         mu, var = prediction.require('mean'), prediction.require('epistemic_variance')
         return abs(mu)/math.sqrt(var)
+    def score_many(self, X):
+        import numpy as np
+        if callable(getattr(self.model, "predict_moments", None)) and type(self).score is UAcquisition.score:
+            mu, variance = self.model.predict_moments(X)
+            self.score_points += len(X)
+            return np.abs(mu)/np.sqrt(variance)
+        return np.asarray([self.score(x) for x in X])
+
     def energy(self, x):
         self.energy_points += 1
         prediction = self.model.predict(x)
@@ -96,3 +104,24 @@ def accept_refinement(x_ref, score_ref, candidates, acquisition, valid):
             x_best, score_best = list(x), score
     return x_best, score_best
 
+
+
+class BatchedPoolSelector(PoolSelector):
+    """Same min/max and distance policy as PoolSelector, for large MC populations."""
+    def select(self, candidates, acquisition, X, problem):
+        import numpy as np
+        from scipy.spatial import cKDTree
+        points = np.asarray(candidates, dtype=float)
+        valid = np.asarray([problem.admissible(x) for x in points])
+        if len(X):
+            distances, _ = cKDTree(X).query(points)
+            valid &= distances > self.min_distance
+        eligible = points[valid]
+        if not len(eligible):
+            raise RuntimeError("No eligible candidate; not convergence")
+        score_many = getattr(acquisition, "score_many", None)
+        scores = score_many(eligible) if callable(score_many) else np.asarray([acquisition.score(x) for x in eligible])
+        if not np.isfinite(scores).all():
+            raise ValueError("Acquisition scores must be finite")
+        index = np.argmin(scores) if acquisition.direction == "min" else np.argmax(scores)
+        return eligible[index].tolist(), float(scores[index])
