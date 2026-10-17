@@ -37,7 +37,7 @@ Python 3.10+ is required. Use the project's virtual environment.
 python -m pip install -r requirements.txt
 python run.py --check-config
 python run.py --list-metamodels
-python run.py --config configs/Kriging_GP.yaml --mode paired --output runs/gp_trial_01
+python run.py --config configs/AK-MCS-U.yaml --mode paired --output runs/gp_trial_01
 python run.py --config configs/SVM.yaml --output runs/svm_trial_01
 python run.py --list-papers
 python run.py --paper P16
@@ -125,9 +125,11 @@ It also supplies analytic input gradients for NH and chunked population predicti
 See `metamodels/ordinary_kriging.py`. The existing `gp` plugin remains the earlier
 empirical-mean sklearn GP; the paper configuration explicitly chooses OrdinaryKriging.
 
-The paper uses DACE; this Python implementation uses SciPy L-BFGS-B. The article
-does not specify theta initial values/bounds, optimizer tolerances or nugget.
-Those numerical choices are exposed/documented in YAML, not attributed to the paper.
+The Python theta search follows DACE's boxmin coordinate and pattern moves. It also
+uses the last accepted theta as the next fit's starting point, tries configured and
+geometrically spaced restart points, and rejects invalid fitted states. The article does not specify
+theta initial values/bounds, warm starts or nugget. Those numerical choices are
+exposed/documented in YAML or implementation notes, not attributed to the paper.
 Input/target sample-standardization follows the DACE manual:
 https://omicron.dk/dace/dace.pdf. A small configured nugget regularizes the matrix;
 latent MSE is floored at 1e-12 for U and NH numerical stability.
@@ -155,7 +157,8 @@ MC populations and model fitting identical at initialization.
 
 ### Population and stopping
 
-The user-selected MC population starts at 1,000,000 points and grows by 100,000;
+The MC population starts at the Rastrigin example's 60,000 points. It grows by 60,000
+only after the learning criterion passes while MC CoV remains above .05;
 `max_population_size` is 2,000,000 and can be changed. Selection, Pf and U inspection
 use the same population. `adaptive:BatchedPoolSelector` preserves min-U selection
 and distance exclusion while handling large populations. Predictions run in bounded
@@ -169,18 +172,21 @@ The plugin declares `required_capabilities`, `supported_acquisition_kinds`, and
 `evaluation.PluginMCEvaluation` computes Pf, routes to the plugin and enforces caps.
 Unknown plugins or incompatible combinations fail before any true g call.
 
-Learning stops at min U >= 2. Overall convergence also requires MC CoV <= .05.
+Learning stops at min U >= 2 over MC points without true evaluations; points already
+evaluated by g remain in Pf and CoV, but cannot hold down the learning check. Overall
+convergence also requires MC CoV <= .05.
 When learning is complete but CoV is too large, MC points are added and rechecked
 without refitting or true g calls. Zero predicted failures cannot imply convergence.
 `budget_exhausted` and `mc_population_limit` are distinct nonconverged outcomes.
 Initial S is in `fixed_samples.json`; `mc_population.json` contains the latest enlarged
 S when expansion occurs. Evaluation logs include the population size and stop factory.
 
-These are intentional user changes to the paper's experiment: Optimal LHD with 10
-initial points instead of random points from S, and 1,000,000 initial MC points instead
-of the Rastrigin example's 60,000. Table 4 reports Pf=.0734 and 416 calls for AK-MCS-U;
-these are historical comparison values, not exact targets for the changed experiment.
-NH is a separate prototype extension. No full numerical reproduction is claimed.
+The intentional user change to the paper's initial design is Optimal LHD with 10
+points instead of random points from S. The initial MC population now matches the
+Rastrigin example's 60,000; its later growth increment and cap remain framework
+settings. Table 4 reports Pf=.0734 and 416 calls for AK-MCS-U; these are historical
+comparison values, not exact targets for the changed experiment. NH is a separate
+prototype extension. No full numerical reproduction is claimed.
 The default CLI config remains Kriging_GP.yaml; select AK-MCS-U.yaml explicitly.
 
 

@@ -145,7 +145,10 @@ including trend-estimation uncertainty). Parameters: theta (positive scalar/vect
 theta_bounds ([lower, upper]), nugget (nonnegative numerical regularization),
 optimize (boolean), optimizer_restarts, batch_size and seed. Coordinates and targets
 use sample-standard-deviation scaling. theta is in those scaled coordinates.
-SciPy L-BFGS-B replaces MATLAB DACE's optimizer; no identical numerical trajectory
-is promised. The existing registry name gp continues to select KrigingGP.
+DACE-style boxmin uses multiplicative coordinate and pattern moves. The last accepted
+theta starts the next fit; configured theta and geometric restarts provide alternatives.
+Only valid finite fitted states are adopted. The warm start, restarts and nugget mean
+an identical MATLAB DACE trajectory is not promised. The existing registry name gp
+continues to select KrigingGP.
 `predict_moments(X)` is an optional batched mean/epistemic-variance API, used by
 population evaluation; the required single-input Prediction contract is unchanged.

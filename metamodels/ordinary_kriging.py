@@ -1,12 +1,10 @@
 """Constant-trend Gaussian ordinary Kriging: GLS, profile MLE and BLUP MSE.
 
-P01 Section 2, Eqs.(6)-(11); numerical scaling follows the DACE manual (https://omicron.dk/dace.html).
-The optimizer is SciPy L-BFGS-B, not a port of DACE's boxmin algorithm.
+P01 Section 2, Eqs.(6)-(11); numerical scaling and boxmin search follow DACE
+(https://omicron.dk/dace.html).
 """
-import warnings
 import numpy as np
 from scipy.linalg import cho_factor, cho_solve
-from scipy.optimize import minimize
 from scipy.spatial.distance import cdist
 from .base import ArrayModel, integer, positive
 from .contracts import Prediction
@@ -44,12 +42,59 @@ class OrdinaryKriging(ArrayModel):
         factor = cho_factor(r, lower=True, check_finite=False)
         ri_one = cho_solve(factor, np.ones(len(r)), check_finite=False)
         denominator = ri_one.sum()
+        if not np.isfinite(denominator) or denominator <= 0:
+            raise np.linalg.LinAlgError('invalid GLS denominator')
         beta = (ri_one @ self.t) / denominator
         residual = self.t - beta
         alpha = cho_solve(factor, residual, check_finite=False)
-        sigma2 = max(float(residual @ alpha / len(r)), np.finfo(float).tiny)
+        raw_sigma2 = float(residual @ alpha / len(r))
+        if not np.isfinite(raw_sigma2) or raw_sigma2 < 0:
+            raise np.linalg.LinAlgError('invalid process variance')
+        sigma2 = max(raw_sigma2, np.finfo(float).tiny)
         objective = len(r) * np.log(sigma2) + 2 * np.log(np.diag(factor[0])).sum()
+        if not np.isfinite(objective) or not np.isfinite(beta) or not np.isfinite(alpha).all():
+            raise np.linalg.LinAlgError('non-finite Kriging state')
         return float(objective), (theta, factor, ri_one, denominator, float(beta), alpha, sigma2)
+
+    def _boxmin(self, start, score):
+        """DACE-style multiplicative coordinate search with pattern moves."""
+        theta = np.asarray(start, dtype=float).copy()
+        value = score(theta)
+        if not np.isfinite(value):
+            return theta, np.inf
+        lo, hi = self.bounds
+        step = 2 ** (np.arange(1, len(theta) + 1) / (len(theta) + 2))
+        for _ in range(2 if len(theta) <= 2 else min(len(theta), 4)):
+            before = theta.copy()
+            for j in range(len(theta)):
+                at_bound = theta[j] == lo or theta[j] == hi
+                trial = theta.copy()
+                trial[j] = (theta[j] / np.sqrt(step[j]) if theta[j] == hi else
+                            theta[j] * np.sqrt(step[j]) if theta[j] == lo else
+                            min(hi, theta[j] * step[j]))
+                trial_value = score(trial)
+                if trial_value < value:
+                    theta, value = trial, trial_value
+                elif not at_bound:
+                    trial[j] = max(lo, theta[j] / step[j])
+                    trial_value = score(trial)
+                    if trial_value < value:
+                        theta, value = trial, trial_value
+            ratio = theta / before
+            if np.array_equal(theta, before):
+                step = np.roll(step, -1) ** .2
+                continue
+            while True:
+                trial = np.clip(theta * ratio, lo, hi)
+                trial_value = score(trial)
+                if trial_value >= value:
+                    break
+                theta, value = trial, trial_value
+                if ((trial == lo) | (trial == hi)).any():
+                    break
+                ratio *= ratio
+            step = np.roll(step, -1) ** .25
+        return theta, value
 
     def fit(self, X, Y):
         x, y = self._training_data(X, Y)
@@ -63,36 +108,56 @@ class OrdinaryKriging(ArrayModel):
         self.y_scale = max(float(y.std(ddof=1)), 1e-8)
         self.z = (x - self.x_center) / self.x_scale
         self.t = (y - self.y_center) / self.y_scale
-        initial = np.log(np.broadcast_to(self.theta0, (self.dimension,)))
-        best_objective, best = self._state(initial)
-        messages = []
-        def objective(v):
-            try:
-                return self._state(v)[0]
-            except np.linalg.LinAlgError:
-                return 1e100
+        configured = np.broadcast_to(self.theta0, (self.dimension,)).copy()
+        previous = getattr(self, 'theta', None) if self.optimize else None
+        starts = [previous.copy()] if previous is not None and len(previous) == self.dimension else []
+        if not starts or not np.array_equal(starts[0], configured):
+            starts.append(configured)
         if self.optimize:
-            rng = np.random.default_rng(self.seed)
-            lo, hi = np.log(self.bounds)
-            starts = [initial] + [rng.uniform(lo, hi, self.dimension) for _ in range(self.restarts)]
-            for start in starts:
-                result = minimize(objective, start, method='L-BFGS-B', bounds=[(lo, hi)] * self.dimension)
-                if not result.success:
-                    messages.append(str(result.message))
-                value = objective(result.x)
+            for i in range(self.restarts):
+                power = (i // 2 + 1) * (1 if i % 2 == 0 else -1)
+                starts.append(np.clip(configured * 4.0 ** power, *self.bounds))
+
+        def evaluate(theta):
+            theta = np.asarray(theta)
+            if theta.shape != (self.dimension,) or not np.isfinite(theta).all() or \
+                    ((theta < self.bounds[0]) | (theta > self.bounds[1])).any():
+                return np.inf, None
+            try:
+                return self._state(np.log(theta))
+            except (np.linalg.LinAlgError, FloatingPointError, ValueError):
+                return np.inf, None
+
+        best_objective, best = np.inf, None
+        rejected = 0
+        for start in starts:
+            value, state = evaluate(start)
+            if state is None:
+                rejected += 1
+                continue
+            if value < best_objective:
+                best_objective, best = value, state
+            if self.optimize:
+                result, result_value = self._boxmin(start, lambda theta: evaluate(theta)[0])
+                value, state = evaluate(result) if np.isfinite(result_value) else (np.inf, None)
+                if state is None:
+                    rejected += 1
+                    continue
                 if value < best_objective:
-                    best_objective, best = self._state(result.x)
+                    best_objective, best = value, state
+        if best is None:
+            raise np.linalg.LinAlgError('No valid theta state within bounds')
         self.theta, self.factor, self.ri_one, self.denominator, self.beta, self.alpha, self.sigma2 = best
-        for message in messages:
-            warnings.warn('OrdinaryKriging optimizer: ' + message, RuntimeWarning, stacklevel=2)
         self._finish([self.theta, self.beta, self.sigma2, self.alpha],
                      trend='constant_GLS', correlation='exp(-sum(theta_j*delta_j**2))',
                      theta=self.theta.tolist(), beta=self.y_center+self.y_scale*self.beta,
                      process_variance=self.sigma2*self.y_scale**2,
                      estimation='profile_maximum_likelihood', objective=best_objective,
-                     optimizer='L-BFGS-B' if self.optimize else 'fixed_theta',
+                     optimizer='DACE_boxmin' if self.optimize else 'fixed_theta',
+                     theta_warm_start=previous.tolist() if previous is not None else None,
+                     optimizer_rejected_results=rejected,
                      input_scaling='training_mean_sample_std', nugget=self.nugget,
-                     warnings=messages, variance_kind='ordinary_kriging_MSE_including_trend_uncertainty')
+                     warnings=[], variance_kind='ordinary_kriging_MSE_including_trend_uncertainty')
 
     def _moments(self, z):
         r = np.exp(-cdist(z*np.sqrt(self.theta), self.z*np.sqrt(self.theta), 'sqeuclidean'))

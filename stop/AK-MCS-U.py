@@ -18,9 +18,14 @@ class Stop:
     def evaluate(self, model, acquisition, population, metrics):
         if not population:
             raise ValueError("AK-MCS-U requires a nonempty MC population")
+        observed = {tuple(x) for x in getattr(model, "X", ())}
+        unobserved = [x for x in population if tuple(x) not in observed]
         minimum = math.inf
         score_many = getattr(acquisition, "score_many", None)
-        scores = score_many(population) if callable(score_many) else (acquisition.score(x) for x in population)
+        scores = ()
+        if unobserved:
+            scores = (score_many(unobserved) if callable(score_many) else
+                      (acquisition.score(x) for x in unobserved))
         for value in scores:
             if not math.isfinite(value) or value < 0:
                 raise ValueError("U scores must be finite and nonnegative")
@@ -29,7 +34,8 @@ class Stop:
         cov = metrics["mc_cov"]
         precision = cov is not None and math.isfinite(cov) and cov <= self.max_mc_cov
         converged = learning and precision
-        return {"population_min_u": float(minimum), "learning_converged": learning,
+        return {"population_min_u": float(minimum) if unobserved else None,
+                "u_scored_points": len(unobserved), "learning_converged": learning,
                 "mc_precision_met": precision, "converged": converged,
                 "stop": converged,
                 "expand_population": learning and not precision,

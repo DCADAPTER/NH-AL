@@ -39,6 +39,21 @@ class StopTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             stop.evaluate(None, Acquisition(), [[float('nan')]], {'mc_cov': .01})
 
+    def test_observed_population_points_do_not_hold_down_min_u(self):
+        class Model:
+            X = [[-1]]
+        class Acquisition:
+            def score_many(self, points):
+                return [x[0] for x in points]
+        stop = Stop({'min_u': 2, 'max_mc_cov': .05})
+        result = stop.evaluate(Model(), Acquisition(), [[-1], [3]], {'mc_cov': .01})
+        self.assertEqual(result['population_min_u'], 3)
+        self.assertEqual(result['u_scored_points'], 1)
+        self.assertTrue(result['converged'])
+        all_observed = stop.evaluate(Model(), Acquisition(), [[-1]], {'mc_cov': .01})
+        self.assertIsNone(all_observed['population_min_u'])
+        self.assertTrue(all_observed['converged'])
+
     def test_preflight_rejects_incompatible_model_and_separate_pool(self):
         for change in ('svm', 'separate', 'bounded', 'missing', 'threshold'):
             cfg = self.config()

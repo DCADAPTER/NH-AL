@@ -19,10 +19,9 @@ reference:
     reported_ak_mcs_u_calls: 416
   deviations:
     - User requests Optimal LHD with 10 points instead of random selection from S.
-    - User requests initial MC size 1000000 and increments of 100000.
-    - Python uses L-BFGS-B; the paper uses MATLAB DACE.
-    - Theta start, bounds and numerical regularization are implementation choices not specified in the paper.
-    - Seed, call/population caps and optional NH are framework settings.
+    - Python uses a DACE-style boxmin search with warm starts and geometric restarts.
+    - Theta start, bounds, warm starts and numerical regularization are implementation choices not specified in the paper.
+    - Seed, MC expansion increment, call/population caps and optional NH are framework settings.
 problem:
   factory: g:Problem
   type: rastrigin
@@ -41,9 +40,9 @@ metamodel:
   # theta is in sample-standardized input coordinates (DACE convention).
   theta: [1.0, 1.0]                   # Not specified in original paper
   theta_bounds: [0.001, 1000.0]       # Not specified in original paper
-  nugget: 1.0e-12                    # Numerical regularization, not observation noise
+  nugget: 1.0e-6                   # Numerical regularization, not observation noise
   optimize: true
-  optimizer_restarts: 2
+  optimizer_restarts: 2               # Additional starts at 4x and 1/4x configured theta
   batch_size: 4096
 acquisition:
   factory: adaptive:UAcquisition
@@ -52,7 +51,7 @@ acquisition:
 sampling:
   factory: adaptive:BatchedPoolSelector
   population: integration
-  pool_size: 1000000                 # Unused when population=integration
+  pool_size: 60000                   # Unused when population=integration
   min_distance: 1.0e-6
 nh:
   factory: nh:NestedHamiltonianPrototype
@@ -75,11 +74,11 @@ nh:
     gtol: 1.0e-6
 evaluation:
   factory: evaluation:PluginMCEvaluation
-  integration_size: 1000000
+  integration_size: 60000            # Initial S in the paper's Rastrigin example
   audit_size: 1                      # Unused by the population stopping plugin
   max_true_calls: 500                # Operational cap; not a convergence condition
-  population_increment: 100000
-  max_population_size: 2000000       # Allows expansion beyond the initial million
+  population_increment: 60000        # Added only after learning converges but MC CoV fails
+  max_population_size: 2000000       # Operational cap for CoV-driven expansion
   stop:
     factory: stop.AK-MCS-U:Stop
     min_u: 2.0                       # Table 1

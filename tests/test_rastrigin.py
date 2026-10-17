@@ -5,6 +5,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 import numpy as np
 from scipy.spatial.distance import cdist
 from scipy.special import ndtr
@@ -66,6 +67,30 @@ class RastriginTests(unittest.TestCase):
         fixed.fit(X,Y); fitted.fit(X,Y)
         self.assertLessEqual(fitted.training_log['objective'], fixed.training_log['objective']+1e-9)
         self.assertTrue(np.isfinite(fitted.predict([0,0]).epistemic_variance))
+
+    def test_boxmin_restarts_cover_nearby_theta_scales(self):
+        problem = Problem({'type': 'rastrigin', 'dimension': 2, 'search_bound': None})
+        X = np.random.default_rng(20261026).normal(size=(160, 2))
+        Y = [problem.g(x) for x in X]
+        nearby = OrdinaryKriging({'theta': [4, 4], 'nugget': 1e-6, 'optimize': False})
+        fitted = OrdinaryKriging({'theta': [1, 1], 'nugget': 1e-6, 'optimizer_restarts': 2})
+        nearby.fit(X, Y)
+        fitted.fit(X, Y)
+        self.assertLessEqual(fitted.training_log['objective'], nearby.training_log['objective'])
+
+    def test_theta_warm_start_and_invalid_search_result(self):
+        rng = np.random.default_rng(12)
+        X = rng.normal(size=(12, 2))
+        Y = np.sin(X[:, 0]) + X[:, 1]**2
+        model = OrdinaryKriging({'theta': [.7, 1.3], 'optimizer_restarts': 0})
+        model.fit(X, Y)
+        previous = model.theta.copy()
+        with patch.object(model, '_boxmin', return_value=(np.array([np.nan, np.nan]), np.inf)) as search:
+            model.fit(np.vstack([X, [[.2, -.4]]]), np.r_[Y, np.sin(.2) + .4**2])
+        np.testing.assert_allclose(search.call_args_list[0].args[0], previous)
+        self.assertGreater(model.training_log['optimizer_rejected_results'], 0)
+        self.assertTrue(np.isfinite(model.training_log['objective']))
+        self.assertTrue(np.isfinite(model.predict([.1, .2]).mean))
 
     def test_optimized_lhd_strata_seed_and_replay(self):
         problem = Problem({'type': 'rastrigin', 'search_bound': None})
