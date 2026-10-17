@@ -76,7 +76,7 @@ evaluation:
   factory: evaluation:PluginMCEvaluation
   integration_size: 60000            # Initial S in the paper's Rastrigin example
   audit_size: 1                      # Unused by the population stopping plugin
-  max_true_calls: 500                # Operational cap; not a convergence condition
+  max_true_calls: 600                # Operational cap; not a convergence condition
   population_increment: 60000        # Added only after learning converges but MC CoV fails
   max_population_size: 2000000       # Operational cap for CoV-driven expansion
   stop:

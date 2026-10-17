@@ -42,7 +42,7 @@ class NestedHamiltonianPrototype:
             self.child_ftol = positive(child.get('ftol', 1e-12), 'nh.child.ftol', allow_zero=True)
             self.child_gtol = positive(child.get('gtol', 1e-6), 'nh.child.gtol')
 
-    def _lbfgsb_child(self, start, acquisition, problem):
+    def _lbfgsb_child(self, start, acquisition, problem, trace=None, path_id=0):
         """Bounded minimization of acquisition.energy, without true g calls.
 
         Keep finite evaluated points even when the optimizer reaches a limit.
@@ -77,6 +77,9 @@ class NestedHamiltonianPrototype:
                 initial_energy = value
             proposals.append(x.tolist())
             energies.append(value)
+            if trace is not None:
+                trace.append({'event': 'child_evaluation', 'path': path_id,
+                              'x': x.tolist(), 'energy': value})
             return value, grad
 
         # SciPy can exceed maxfun within a line search; objective enforces a hard cap.
@@ -105,7 +108,12 @@ class NestedHamiltonianPrototype:
                                best_x=proposals[best] if best is not None else None,
                                seconds=time.perf_counter()-started)
 
-    def refine(self, x_ref, acquisition, problem, rng):
+    def refine(self, x_ref, acquisition, problem, rng, trace=None):
+        """Optionally append replay events; tracing does not change search decisions.
+
+        Hamiltonian events distinguish accepted states from rejected trials.
+        Child events are objective evaluations, not physical trajectory states.
+        """
         queue = [(list(x_ref), 0)]
         proposals = []
         diagnostics = {'paths': 0, 'branches': 0, 'rejected_steps': 0, 'accepted_steps': 0,
@@ -115,7 +123,8 @@ class NestedHamiltonianPrototype:
             x, depth = queue.pop(0)
             diagnostics['paths'] += 1
             if depth > 0 and self.child_method == 'lbfgsb':
-                child_points, child_log = self._lbfgsb_child(x, acquisition, problem)
+                child_points, child_log = self._lbfgsb_child(
+                    x, acquisition, problem, trace=trace, path_id=diagnostics['paths'])
                 proposals.extend(child_points)
                 diagnostics['local_search_paths'] += 1
                 diagnostics['children'].append(dict(child_log, depth=depth))
@@ -124,6 +133,10 @@ class NestedHamiltonianPrototype:
             p = [rng.gauss(0, math.sqrt(self.mass*self.temperature)) for _ in x]
             values = [acquisition.energy(x)]
             dt = self.dt
+            if trace is not None:
+                trace.append({'event': 'start', 'path': diagnostics['paths'],
+                              'x': list(x), 'p': list(p), 'energy': values[0],
+                              'kinetic': sum(v*v for v in p)/(2*self.mass), 'dt': dt})
             for _ in range(self.steps):
                 h0 = acquisition.energy(x) + sum(v*v for v in p)/(2*self.mass)
                 success = False
@@ -131,14 +144,20 @@ class NestedHamiltonianPrototype:
                     grad = acquisition.energy_gradient(x)
                     ph = [pi-.5*dt*gi for pi, gi in zip(p, grad)]
                     xn = [xi+dt*pi/self.mass for xi, pi in zip(x, ph)]
+                    trial_energy = trial_kinetic = None
                     if problem.admissible(xn):
                         gn = acquisition.energy_gradient(xn)
                         pn = [pi-.5*dt*gi for pi, gi in zip(ph, gn)]
                         vn = acquisition.energy(xn)
                         h1 = vn + sum(v*v for v in pn)/(2*self.mass)
+                        trial_energy, trial_kinetic = vn, sum(v*v for v in pn)/(2*self.mass)
                         if math.isfinite(h1) and abs(h1-h0) <= self.tolerance*max(1, abs(h0)):
                             success = True
                             break
+                    if trace is not None:
+                        trace.append({'event': 'rejected', 'path': diagnostics['paths'],
+                                      'x': list(xn), 'from_x': list(x), 'energy': trial_energy,
+                                      'kinetic': trial_kinetic, 'dt': dt})
                     diagnostics['rejected_steps'] += 1
                     dt *= .5
                 if not success:
@@ -148,6 +167,10 @@ class NestedHamiltonianPrototype:
                         queue.append((list(x), depth+1))
                         diagnostics['branches'] += 1
                 x, p = xn, pn
+                if trace is not None:
+                    trace.append({'event': 'accepted', 'path': diagnostics['paths'],
+                                  'x': list(x), 'p': list(p), 'energy': vn,
+                                  'kinetic': sum(v*v for v in p)/(2*self.mass), 'dt': dt})
                 values.append(vn)
                 proposals.append(list(x))
                 diagnostics['accepted_steps'] += 1

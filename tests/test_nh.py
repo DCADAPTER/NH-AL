@@ -38,6 +38,23 @@ class Quadratic:
 
 
 class ChildTests(unittest.TestCase):
+    def test_trace_preserves_search_and_separates_child_evaluations(self):
+        cfg = {'dt': .1, 'steps': 40, 'max_paths': 2, 'max_depth': 1,
+               'energy_tolerance': .1, 'child': {'method': 'lbfgsb', 'radius': .5}}
+        baseline, baseline_log = NestedHamiltonianPrototype(cfg).refine(
+            [1.], Quadratic(), BoxProblem(), random.Random(7))
+        trace = []
+        replay, replay_log = NestedHamiltonianPrototype(cfg).refine(
+            [1.], Quadratic(), BoxProblem(), random.Random(7), trace=trace)
+        self.assertEqual(baseline, replay)
+        for key in ('paths', 'branches', 'accepted_steps', 'rejected_steps'):
+            self.assertEqual(baseline_log[key], replay_log[key])
+        self.assertEqual(sum(e['event'] == 'accepted' for e in trace), replay_log['accepted_steps'])
+        self.assertEqual(sum(e['event'] == 'rejected' for e in trace), replay_log['rejected_steps'])
+        self.assertEqual(sum(e['event'] == 'child_evaluation' for e in trace),
+                         sum(c['nfev'] for c in replay_log['children']))
+        json.dumps(trace, allow_nan=False)
+
     def test_real_parent_trough_spawns_terminal_lbfgsb_child(self):
         cfg = {'dt': .1, 'steps': 40, 'max_paths': 2, 'max_depth': 1,
                'energy_tolerance': .1, 'child': {'method': 'lbfgsb', 'radius': .5}}
