@@ -3,6 +3,7 @@
 profile: metamodel_demo
 mode: reference
 seed: 20261015
+repetitions: 10                      # rep_001..rep_010; increase and use --resume to append
 output: runs/AK-MCS-U
 reference:
   id: P01
@@ -18,6 +19,7 @@ reference:
     reported_pf: 0.0734
     reported_ak_mcs_u_calls: 416
   deviations:
+    - Independent adaptive and evaluation MC sets with holdout U stopping are a comparison protocol, not the paper's shared S.
     - User requests Optimal LHD with 10 points instead of random selection from S.
     - Python uses a DACE-style boxmin search with warm starts and geometric restarts.
     - Theta start, bounds, warm starts and numerical regularization are implementation choices not specified in the paper.
@@ -50,8 +52,8 @@ acquisition:
   direction: min
 sampling:
   factory: adaptive:BatchedPoolSelector
-  population: integration
-  pool_size: 60000                   # Unused when population=integration
+  population: independent           # Fixed adaptive set; integration restores shared S
+  pool_size: 60000                   # Adaptive set size (seed + 55)
   min_distance: 1.0e-6
 nh:
   factory: nh:NestedHamiltonianPrototype
@@ -74,12 +76,13 @@ nh:
     gtol: 1.0e-6
 evaluation:
   factory: evaluation:PluginMCEvaluation
-  integration_size: 60000            # Initial S in the paper's Rastrigin example
+  integration_size: 60000            # Independent evaluation set (seed + 22)
   audit_size: 1                      # Unused by the population stopping plugin
   max_true_calls: 600                # Operational cap; not a convergence condition
   population_increment: 60000        # Added only after learning converges but MC CoV fails
   max_population_size: 2000000       # Operational cap for CoV-driven expansion
   stop:
     factory: stop.AK-MCS-U:Stop
+    population_mode: holdout         # shared requires sampling.population=integration
     min_u: 2.0                       # Table 1
     max_mc_cov: 0.05                  # Stage 8, Eq.(13)

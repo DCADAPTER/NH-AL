@@ -51,17 +51,28 @@ class Problem:
         return None
 
 class Evaluator:
-    def __init__(self, problem, output):
+    def __init__(self, problem, output, replay=()):
         self.problem = problem
         self.output = Path(output)
         self.cache = {}
         self.n_calls = 0
         self.total_seconds = 0.0
+        self.replay = replay
 
     def evaluate(self, x, iteration, role):
         key = tuple(x)
         if key in self.cache:
             return self.cache[key]
+        if self.n_calls < len(self.replay):
+            saved = self.replay[self.n_calls]
+            if (saved['x'] != list(x) or saved['iteration'] != iteration or saved['role'] != role):
+                raise ValueError('Resume replay diverged; keep the original code, config and environment')
+            with self.output.open('a', encoding='utf-8') as f:
+                f.write(json.dumps(saved, allow_nan=False)+'\n')
+            self.n_calls += 1
+            self.total_seconds += saved['seconds']
+            self.cache[key] = saved['y']
+            return saved['y']
         start = time.perf_counter()
         record = {"iteration": iteration, "role": role, "x": list(x)}
         try:

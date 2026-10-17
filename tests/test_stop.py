@@ -11,7 +11,7 @@ from unittest.mock import patch
 from evaluation import PluginMCEvaluation
 from metamodels import CompatibilityError
 from metamodels.contracts import Prediction
-from pipeline import ROOT, prepare, read_config, run
+from pipeline import ROOT, execute, prepare, prepare_runs, read_config, run
 
 Stop = importlib.import_module('stop.AK-MCS-U').Stop
 
@@ -20,10 +20,85 @@ class StopTests(unittest.TestCase):
     def config(self):
         cfg = read_config(ROOT/'configs/AK-MCS-U.yaml')
         cfg['initial_design'].update(size=4, method='random_from_mc_population')
+        cfg['sampling'].update(population='integration', pool_size=12)
+        cfg['evaluation']['stop']['population_mode'] = 'shared'
         cfg['metamodel']['optimize'] = False
         cfg['evaluation'].update(integration_size=8, max_true_calls=6,
                                  population_increment=8, max_population_size=16)
         return cfg
+
+    def holdout_config(self):
+        cfg = self.config()
+        cfg['sampling']['population'] = 'independent'
+        cfg['evaluation']['stop']['population_mode'] = 'holdout'
+        cfg['nh'].update(steps=2, max_paths=1)
+        return cfg
+
+    def test_holdout_scores_all_evaluation_points(self):
+        class Model:
+            X = [[1]]
+        class Acquisition:
+            def score_many(self, points): return [x[0] for x in points]
+        stop = Stop({'population_mode': 'holdout', 'min_u': 2, 'max_mc_cov': .05})
+        result = stop.evaluate(Model(), Acquisition(), [[1], [3]], {'mc_cov': .01})
+        self.assertEqual(result['population_min_u'], 1)
+        self.assertEqual(result['u_scored_points'], 2)
+        self.assertFalse(result['converged'])
+        result = stop.evaluate(None, Acquisition(), [[2], [3]], {'mc_cov': .01})
+        self.assertEqual(result['stop_reason'], 'converged_holdout_u')
+
+    def test_holdout_paired_routing_and_evaluation(self):
+        from adaptive import UAcquisition
+        from metamodels.ordinary_kriging import OrdinaryKriging
+        cfg = self.holdout_config()
+        cfg['evaluation']['stop']['min_u'] = 1e12
+        with tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stdout(io.StringIO()):
+            out = Path(tmp)/'paired'
+            execute(cfg, 'paired', out)
+            saved = []
+            for mode in ('reference', 'nh'):
+                folder = out/mode
+                samples = json.loads((folder/'fixed_samples.json').read_text())
+                saved.append(samples)
+                adaptive = {tuple(x) for x in samples['adaptive']}
+                evaluation = {tuple(x) for x in samples['integration']}
+                self.assertTrue(adaptive.isdisjoint(evaluation))
+                choices = [json.loads(s) for s in (folder/'selection.jsonl').read_text().splitlines()]
+                calls = [json.loads(s) for s in (folder/'g_calls.jsonl').read_text().splitlines()]
+                self.assertTrue(all(tuple(c['x_reference']) in adaptive for c in choices))
+                self.assertTrue(all(tuple(c['x']) in adaptive for c in calls[:4]))
+                self.assertTrue(all(tuple(c['x']) not in evaluation for c in calls))
+                rows = [json.loads(s) for s in (folder/'evaluation.jsonl').read_text().splitlines()]
+                for row in rows:
+                    model = OrdinaryKriging(cfg['metamodel'])
+                    observed = calls[:row['n_true_calls']]
+                    model.fit([c['x'] for c in observed], [c['y'] for c in observed])
+                    scores = UAcquisition(model).score_many(samples['integration'])
+                    self.assertAlmostEqual(row['population_min_u'], min(scores))
+                    pf = sum(model.predict(x).mean <= 0 for x in samples['integration']) / len(evaluation)
+                    self.assertAlmostEqual(row['pf_surrogate'], pf)
+                    self.assertEqual(row['u_scored_points'], 8)
+                    self.assertEqual(row['population_mode'], 'holdout')
+            self.assertEqual(saved[0], saved[1])
+
+    def test_holdout_validation_and_no_cross_run_aliases(self):
+        cfg = self.holdout_config()
+        pair = prepare_runs(cfg, 'paired')
+        ref, nh = pair['reference'], pair['nh']
+        for name in ('integration', 'adaptive_population'):
+            self.assertEqual(getattr(ref, name), getattr(nh, name))
+            self.assertIsNot(getattr(ref, name), getattr(nh, name))
+            self.assertIsNot(getattr(ref, name)[0], getattr(nh, name)[0])
+        self.assertIs(nh.evaluator.integration, nh.integration)
+        for change in ('source', 'bounded', 'mode', 'typo'):
+            cfg = self.holdout_config()
+            if change == 'source': cfg['sampling']['population'] = 'integration'
+            elif change == 'bounded': cfg['problem']['search_bound'] = 5
+            elif change == 'mode': cfg['evaluation']['stop']['population_mode'] = 'typo'
+            else: cfg['sampling']['population'] = 'typo'
+            with self.subTest(change=change), patch('g.Problem.g') as oracle:
+                with self.assertRaises(ValueError): prepare(cfg, 'reference')
+                oracle.assert_not_called()
 
     def test_learning_precision_zero_failures_and_threshold(self):
         class Acquisition:
@@ -68,7 +143,6 @@ class StopTests(unittest.TestCase):
                 oracle.assert_not_called()
 
     def test_expansion_rechecks_without_true_calls_or_refitting(self):
-        cfg = self.config()
         class CertainSafeModel:
             capabilities = frozenset({'mean', 'epistemic_variance'})
             snapshot = 'fitted'
@@ -77,21 +151,25 @@ class StopTests(unittest.TestCase):
             def fit(self, X, Y): self.fit_count += 1
             def predict(self, x, gradient=False):
                 return Prediction(mean=3, epistemic_variance=1)
-        model = CertainSafeModel()
-        with tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stdout(io.StringIO()):
-            with patch('pipeline.create_metamodel', return_value=model):
-                out = Path(tmp)/'run'
-                result = run(cfg, 'reference', out)
-            self.assertEqual(result['n_true_calls'], 4)
-            self.assertEqual(model.fit_count, 1)
-            self.assertFalse(result['final']['converged'])
-            self.assertEqual(result['final']['stop_reason'], 'mc_population_limit')
-            rows = [json.loads(s) for s in (out/'evaluation.jsonl').read_text().splitlines()]
-            self.assertEqual([r['population_size'] for r in rows], [8, 16])
-            initial = json.loads((out/'fixed_samples.json').read_text())['integration']
-            enlarged = json.loads((out/'mc_population.json').read_text())
-            self.assertEqual(enlarged[:8], initial)
-            self.assertEqual(len(enlarged), 16)
+        for cfg in (self.config(), self.holdout_config()):
+            model = CertainSafeModel()
+            with self.subTest(mode=cfg['evaluation']['stop']['population_mode']), tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stdout(io.StringIO()):
+                with patch('pipeline.create_metamodel', return_value=model):
+                    out = Path(tmp)/'run'
+                    pipeline = prepare(cfg, 'reference')
+                    adaptive_before = json.dumps(pipeline.adaptive_population)
+                    result = pipeline.run(out)
+                self.assertEqual(json.dumps(pipeline.adaptive_population), adaptive_before)
+                self.assertEqual(result['n_true_calls'], 4)
+                self.assertEqual(model.fit_count, 1)
+                self.assertFalse(result['final']['converged'])
+                self.assertEqual(result['final']['stop_reason'], 'mc_population_limit')
+                rows = [json.loads(s) for s in (out/'evaluation.jsonl').read_text().splitlines()]
+                self.assertEqual([r['population_size'] for r in rows], [8, 16])
+                initial = json.loads((out/'fixed_samples.json').read_text())['integration']
+                enlarged = json.loads((out/'mc_population.json').read_text())
+                self.assertEqual(enlarged[:8], initial)
+                self.assertEqual(len(enlarged), 16)
 
     def test_actual_selection_uses_mc_population_and_budget_is_not_convergence(self):
         cfg = self.config()

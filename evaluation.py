@@ -85,6 +85,7 @@ class PluginMCEvaluation(BudgetMCEvaluation):
         self.required_capabilities = self.stop_plugin.required_capabilities
         self.supported_acquisition_kinds = self.stop_plugin.supported_acquisition_kinds
         self.requires_shared_population = getattr(self.stop_plugin, "requires_shared_population", False)
+        self.requires_independent_population = getattr(self.stop_plugin, "requires_independent_population", False)
         self.population_increment = integer(cfg["population_increment"], "population_increment")
         self.max_population_size = integer(cfg["max_population_size"], "max_population_size")
         if not integration or len(integration) > self.max_population_size:

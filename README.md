@@ -60,6 +60,37 @@ execute validates every requested mode before any true g call. In paired mode,
 an incompatible NH configuration prevents the Reference run from consuming budget.
 Existing output directories are never overwritten.
 
+## Repeated experiments and resume
+
+Set `repetitions: 10` in the method config (AK-MCS-U default). Run:
+
+```powershell
+python run.py --config configs/AK-MCS-U.yaml --mode paired --output runs/repeated_01
+python run.py --config configs/AK-MCS-U.yaml --mode paired --output runs/repeated_01 --resume
+```
+
+Outputs are `rep_001/reference`, `rep_001/nh`, etc.; `results.json` collects completed
+summaries. Point Analyze.ipynb's RUN_DIR at one `rep_XXX` folder. Each repetition
+adds 100,000 to the base RNG and initial-design seeds; both modes share the same
+initial design and populations within a repetition. Explicit metamodel seeds also
+advance. An `initial_design.input_file` intentionally keeps the saved design fixed.
+
+`--resume` skips each completed mode. Interrupted modes replay fitting/selection
+from the start using previously logged successful g values, then continue with new
+g calls. This preserves theta warm starts and avoids recomputing recorded g values.
+Replay checks coordinates and fails if the trajectory changes. Use the same code
+and environment. A g call interrupted before its result was logged must be retried.
+Old incomplete folders are retained as `.MODE_interrupted_*`, and a durable replay
+file protects observations if replay itself is interrupted. No run data is deleted.
+Timing fields on resumed runs describe the rebuilding attempt (true_seconds includes
+reused observation times); they are not the total wall time across interruptions.
+
+Increase `repetitions` and rerun with `--resume` to append repetitions. Other config
+changes are rejected; choose a fresh output folder for a different experiment.
+Resume is for experiment folders created by this runner, not older standalone runs.
+Run only one process per output folder. Configs without `repetitions` retain the
+original single-run output layout unless `--resume` is explicitly used.
+
 ## Method configurations
 
 | YAML | Model | Acquisition / stopping |
@@ -157,29 +188,53 @@ MC populations and model fitting identical at initialization.
 
 ### Population and stopping
 
-The MC population starts at the Rastrigin example's 60,000 points. It grows by 60,000
-only after the learning criterion passes while MC CoV remains above .05;
-`max_population_size` is 2,000,000 and can be changed. Selection, Pf and U inspection
-use the same population. `adaptive:BatchedPoolSelector` preserves min-U selection
-and distance exclusion while handling large populations. Predictions run in bounded
-chunks (`metamodel.batch_size`).
+The current comparison config uses two independent standard-normal MC sets:
+`sampling.population: independent` fixes 60,000 adaptive candidates (`pool_size`,
+seed + 55); `evaluation.integration_size` fixes 60,000 evaluation points (seed + 22).
+Reference selection and NH starting points use only the adaptive set. Pf, CoV and
+minimum U use only the evaluation set. Paired runs copy identical coordinates for
+both sets without sharing mutable lists. Random-from-population initial designs
+also use the adaptive set; the default Optimal LHD remains independently generated.
+
+`evaluation.stop.population_mode: holdout` selects this comparison protocol.
+It is a change from the paper's shared S, not a paper reproduction. To restore
+shared-population behavior set **both** `sampling.population: integration` and
+`evaluation.stop.population_mode: shared`. Old configs without population_mode
+default to shared. Other demo configs retain their per-iteration candidate pools.
+
+Only the evaluation set grows, by 60,000, after min U >= 2 while MC CoV exceeds .05
+(or is undefined because no failures are predicted). `max_population_size` is
+2,000,000. Expansion uses seed + 44, so paired runs share the same expansion
+prefix even if they expand at different iterations. The adaptive set stays fixed.
+In shared mode, the expanded evaluation set also remains the candidate set.
+`adaptive:BatchedPoolSelector` preserves min-U selection and distance exclusion;
+predictions run in bounded chunks (`metamodel.batch_size`).
 
 `evaluation.stop.factory: stop.AK-MCS-U:Stop` loads `stop/AK-MCS-U.py` via importlib.
 The plugin declares `required_capabilities`, `supported_acquisition_kinds`, and
-`requires_shared_population`, and implements
+`requires_shared_population` / `requires_independent_population`, and implements
 `evaluate(model, acquisition, population, metrics)`. The result contains `stop`,
 `converged`, `stop_reason` and optionally `expand_population`.
 `evaluation.PluginMCEvaluation` computes Pf, routes to the plugin and enforces caps.
 Unknown plugins or incompatible combinations fail before any true g call.
 
-Learning stops at min U >= 2 over MC points without true evaluations; points already
-evaluated by g remain in Pf and CoV, but cannot hold down the learning check. Overall
-convergence also requires MC CoV <= .05.
+Learning stops at min U >= 2 over the evaluation set. Shared mode excludes observed
+points from the U check (they remain in Pf and CoV); holdout mode scores every
+evaluation point. Overall convergence also requires MC CoV <= .05. Holdout
+convergence is labeled `converged_holdout_u`; shared convergence retains
+`converged_ak_mcs_u`. The stop plugin owns this decision, independently of NH.
+An evaluation set used repeatedly for stopping is a validation set, not an untouched
+final test set. Minimum U remains a model-confidence criterion, not a measured
+true-g error or a guarantee of Pf accuracy. Splitting sets does not guarantee that
+NH will improve or that either method will converge within the budget.
 When learning is complete but CoV is too large, MC points are added and rechecked
 without refitting or true g calls. Zero predicted failures cannot imply convergence.
 `budget_exhausted` and `mc_population_limit` are distinct nonconverged outcomes.
-Initial S is in `fixed_samples.json`; `mc_population.json` contains the latest enlarged
-S when expansion occurs. Evaluation logs include the population size and stop factory.
+`fixed_samples.json` stores the initial evaluation set as `integration`, the fixed
+candidate set as `adaptive` in independent mode, and the legacy `audit` array.
+`mc_population.json` contains the latest enlarged evaluation set when expansion
+occurs. Evaluation logs include `population_mode`, population size and stop factory.
+Existing runs and their effective configs retain their original shared semantics.
 
 The intentional user change to the paper's initial design is Optimal LHD with 10
 points instead of random points from S. The initial MC population now matches the

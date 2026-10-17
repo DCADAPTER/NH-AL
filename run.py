@@ -13,6 +13,7 @@ def main(argv=None):
     parser.add_argument("--config", default=str(DEFAULT_CONFIG))
     parser.add_argument("--mode", choices=["reference", "nh", "paired"], default=None)
     parser.add_argument("--output", default=None)
+    parser.add_argument("--resume", action="store_true", help="Resume a repeated experiment")
     parser.add_argument("--list-metamodels", action="store_true")
     parser.add_argument("--check-config", action="store_true",
                         help="Validate requested modes without fitting or calling true g")
@@ -37,8 +38,9 @@ def main(argv=None):
 
     cfg = read_config(args.config)
     mode = args.mode or cfg["mode"]
+    from experiments import repeat, repetition_config
     if args.check_config:
-        pipelines = prepare_runs(cfg, mode)
+        pipelines = prepare_runs(repetition_config(cfg, 0), mode)
         print(json.dumps({
             "valid": True,
             "runs": {name: {"model": type(pipeline.model).__name__,
@@ -46,7 +48,10 @@ def main(argv=None):
                      for name, pipeline in pipelines.items()}
         }))
         return
-    execute(cfg, mode, Path(args.output or cfg["output"]))
+    if 'repetitions' in cfg or args.resume:
+        repeat(cfg, mode, Path(args.output or cfg['output']), resume=args.resume)
+    else:
+        execute(cfg, mode, Path(args.output or cfg["output"]))
 
 
 if __name__ == "__main__":
