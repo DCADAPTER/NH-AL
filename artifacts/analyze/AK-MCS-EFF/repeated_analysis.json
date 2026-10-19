@@ -1,0 +1,3959 @@
+{
+  "provenance": {
+    "experiment": "c:\\Users\\user\\Desktop\\LAB\\NH-AL\\NH-AL\\runs\\AK-MCS-EFF",
+    "problem": {
+      "factory": "g:Problem",
+      "type": "rastrigin",
+      "dimension": 2,
+      "search_bound": null
+    },
+    "test_seed": 2026101801,
+    "reference_seed": 2026101802,
+    "n_test": 60000,
+    "n_reference": 1000000,
+    "test_failures": 4409,
+    "reference_failures": 72911,
+    "pf_test_true": 0.07348333333333333,
+    "pf_reference": 0.072911,
+    "reference_mc_95_wilson": [
+      0.07240306723876606,
+      0.0734222140382416
+    ],
+    "offline_true_calls_this_execution": 1060000,
+    "truth_seconds": 1.1307318999897689,
+    "checkpoints": [
+      10,
+      100,
+      200,
+      300,
+      400,
+      500,
+      600
+    ],
+    "completed_pairs": [
+      "rep_001",
+      "rep_002",
+      "rep_003",
+      "rep_004",
+      "rep_005",
+      "rep_006"
+    ],
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "code_hashes": {
+      "g.py": "8855132f929a115f1f8f8264a44209b7bf74117b59d82ebef2ca3f5d97934a6e",
+      "metamodels/ordinary_kriging.py": "13ea56e7b84b819ad6b034e8434ba3b8e89a6fa1acb4b1b903855e9864537aca",
+      "metamodels/base.py": "9213664948aeb5ac4b75ff4659895c33e098f141a42d6b79746e94ec0aeedc1c"
+    }
+  },
+  "status": [
+    [
+      "rep_001",
+      "\uc644\ub8cc",
+      "\uc644\ub8cc",
+      "\uc9d1\uacc4"
+    ],
+    [
+      "rep_002",
+      "\uc644\ub8cc",
+      "\uc644\ub8cc",
+      "\uc9d1\uacc4"
+    ],
+    [
+      "rep_003",
+      "\uc644\ub8cc",
+      "\uc644\ub8cc",
+      "\uc9d1\uacc4"
+    ],
+    [
+      "rep_004",
+      "\uc644\ub8cc",
+      "\uc644\ub8cc",
+      "\uc9d1\uacc4"
+    ],
+    [
+      "rep_005",
+      "\uc644\ub8cc",
+      "\uc644\ub8cc",
+      "\uc9d1\uacc4"
+    ],
+    [
+      "rep_006",
+      "\uc644\ub8cc",
+      "\uc644\ub8cc",
+      "\uc9d1\uacc4"
+    ],
+    [
+      "rep_007",
+      "\ubbf8\uc644\ub8cc/\uc5c6\uc74c",
+      "\ubbf8\uc644\ub8cc/\uc5c6\uc74c",
+      "\uc81c\uc678"
+    ]
+  ],
+  "metrics": [
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_001",
+      "mode": "reference",
+      "seed": 20261015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.0722449151891152
+    },
+    {
+      "false_negative_count": 3253,
+      "false_positive_count": 1359,
+      "pf_test_prediction": 0.041916666666666665,
+      "pf_signed_error_same_set": -0.031566666666666666,
+      "pf_relative_error_same_set": 0.42957586754366067,
+      "region_error": 0.07686666666666667,
+      "region_error_relative_to_failure": 1.0460421864368337,
+      "failure_miss_rate": 0.7378090269902472,
+      "false_alarm_rate": 0.024446403194761743,
+      "repetition": "rep_001",
+      "mode": "reference",
+      "seed": 20261015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.4250981790584869,
+      "mean_misclassification_probability": 0.016079091934712963
+    },
+    {
+      "false_negative_count": 3311,
+      "false_positive_count": 401,
+      "pf_test_prediction": 0.024983333333333333,
+      "pf_signed_error_same_set": -0.0485,
+      "pf_relative_error_same_set": 0.6600136085280109,
+      "region_error": 0.06186666666666667,
+      "region_error_relative_to_failure": 0.8419142662735314,
+      "failure_miss_rate": 0.7509639374007712,
+      "false_alarm_rate": 0.007213397852170315,
+      "repetition": "rep_001",
+      "mode": "reference",
+      "seed": 20261015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.6573447993672652,
+      "mean_misclassification_probability": 0.061915770961384106
+    },
+    {
+      "false_negative_count": 1023,
+      "false_positive_count": 64,
+      "pf_test_prediction": 0.0575,
+      "pf_signed_error_same_set": -0.01598333333333333,
+      "pf_relative_error_same_set": 0.21750963937400772,
+      "region_error": 0.018116666666666666,
+      "region_error_relative_to_failure": 0.24654116579723293,
+      "failure_miss_rate": 0.23202540258562032,
+      "false_alarm_rate": 0.001151265492615711,
+      "repetition": "rep_001",
+      "mode": "reference",
+      "seed": 20261015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.21136728340030997,
+      "mean_misclassification_probability": 0.019230117200031756
+    },
+    {
+      "false_negative_count": 5,
+      "false_positive_count": 2,
+      "pf_test_prediction": 0.07343333333333334,
+      "pf_signed_error_same_set": -4.999999999999449e-05,
+      "pf_relative_error_same_set": 0.0006804264005443411,
+      "region_error": 0.00011666666666666667,
+      "region_error_relative_to_failure": 0.0015876616012701294,
+      "failure_miss_rate": 0.0011340440009072353,
+      "false_alarm_rate": 3.597704664424097e-05,
+      "repetition": "rep_001",
+      "mode": "reference",
+      "seed": 20261015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.007163985315430222,
+      "mean_misclassification_probability": 0.0010602953360951822
+    },
+    {
+      "false_negative_count": 4,
+      "false_positive_count": 3,
+      "pf_test_prediction": 0.07346666666666667,
+      "pf_signed_error_same_set": -1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 0.00011666666666666667,
+      "region_error_relative_to_failure": 0.0015876616012701294,
+      "failure_miss_rate": 0.0009072352007257881,
+      "false_alarm_rate": 5.3965569966361464e-05,
+      "repetition": "rep_001",
+      "mode": "reference",
+      "seed": 20261015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.007621163701864775,
+      "mean_misclassification_probability": 0.0005635246288756191
+    },
+    {
+      "false_negative_count": 3,
+      "false_positive_count": 4,
+      "pf_test_prediction": 0.0735,
+      "pf_signed_error_same_set": 1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 0.00011666666666666667,
+      "region_error_relative_to_failure": 0.0015876616012701294,
+      "failure_miss_rate": 0.0006804264005443411,
+      "false_alarm_rate": 7.195409328848194e-05,
+      "repetition": "rep_001",
+      "mode": "reference",
+      "seed": 20261015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.008078342088299328,
+      "mean_misclassification_probability": 0.0004014923468989739
+    },
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_001",
+      "mode": "nh",
+      "seed": 20261015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.0722449151891152
+    },
+    {
+      "false_negative_count": 4193,
+      "false_positive_count": 126,
+      "pf_test_prediction": 0.0057,
+      "pf_signed_error_same_set": -0.06778333333333333,
+      "pf_relative_error_same_set": 0.9224313903379451,
+      "region_error": 0.07198333333333333,
+      "region_error_relative_to_failure": 0.9795872079836697,
+      "failure_miss_rate": 0.9510092991608075,
+      "false_alarm_rate": 0.002266553938587181,
+      "repetition": "rep_001",
+      "mode": "nh",
+      "seed": 20261015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.9218224959196829,
+      "mean_misclassification_probability": 0.0021191307086220745
+    },
+    {
+      "false_negative_count": 3450,
+      "false_positive_count": 433,
+      "pf_test_prediction": 0.0232,
+      "pf_signed_error_same_set": -0.05028333333333333,
+      "pf_relative_error_same_set": 0.6842821501474258,
+      "region_error": 0.06471666666666667,
+      "region_error_relative_to_failure": 0.8806985711045588,
+      "failure_miss_rate": 0.7824903606259923,
+      "false_alarm_rate": 0.007789030598478171,
+      "repetition": "rep_001",
+      "mode": "nh",
+      "seed": 20261015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.6818038430415164,
+      "mean_misclassification_probability": 0.05479650852408292
+    },
+    {
+      "false_negative_count": 1909,
+      "false_positive_count": 145,
+      "pf_test_prediction": 0.044083333333333335,
+      "pf_signed_error_same_set": -0.029399999999999996,
+      "pf_relative_error_same_set": 0.4000907235200726,
+      "region_error": 0.03423333333333333,
+      "region_error_relative_to_failure": 0.4658652755726922,
+      "failure_miss_rate": 0.4329779995463824,
+      "false_alarm_rate": 0.0026083358817074707,
+      "repetition": "rep_001",
+      "mode": "nh",
+      "seed": 20261015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.39538158394023765,
+      "mean_misclassification_probability": 0.024483021638938483
+    },
+    {
+      "false_negative_count": 26,
+      "false_positive_count": 27,
+      "pf_test_prediction": 0.0735,
+      "pf_signed_error_same_set": 1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 0.0008833333333333333,
+      "region_error_relative_to_failure": 0.012020866409616693,
+      "failure_miss_rate": 0.005897028804717623,
+      "false_alarm_rate": 0.00048569012969725315,
+      "repetition": "rep_001",
+      "mode": "nh",
+      "seed": 20261015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.008078342088299328,
+      "mean_misclassification_probability": 0.005341115298952576
+    },
+    {
+      "false_negative_count": 4,
+      "false_positive_count": 6,
+      "pf_test_prediction": 0.07351666666666666,
+      "pf_signed_error_same_set": 3.333333333332966e-05,
+      "pf_relative_error_same_set": 0.0004536176003628941,
+      "region_error": 0.00016666666666666666,
+      "region_error_relative_to_failure": 0.0022680880018144706,
+      "failure_miss_rate": 0.0009072352007257881,
+      "false_alarm_rate": 0.00010793113993272293,
+      "repetition": "rep_001",
+      "mode": "nh",
+      "seed": 20261015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.008306931281516603,
+      "mean_misclassification_probability": 0.0007229375705240526
+    },
+    {
+      "false_negative_count": 3,
+      "false_positive_count": 5,
+      "pf_test_prediction": 0.07351666666666666,
+      "pf_signed_error_same_set": 3.333333333332966e-05,
+      "pf_relative_error_same_set": 0.0004536176003628941,
+      "region_error": 0.00013333333333333334,
+      "region_error_relative_to_failure": 0.0018144704014515763,
+      "failure_miss_rate": 0.0006804264005443411,
+      "false_alarm_rate": 8.994261661060244e-05,
+      "repetition": "rep_001",
+      "mode": "nh",
+      "seed": 20261015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.008306931281516603,
+      "mean_misclassification_probability": 0.0004379091841211878
+    },
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_002",
+      "mode": "reference",
+      "seed": 20361015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.0720930860349417
+    },
+    {
+      "false_negative_count": 2922,
+      "false_positive_count": 2057,
+      "pf_test_prediction": 0.05906666666666667,
+      "pf_signed_error_same_set": -0.014416666666666661,
+      "pf_relative_error_same_set": 0.1961896121569517,
+      "region_error": 0.08298333333333334,
+      "region_error_relative_to_failure": 1.1292810161034248,
+      "failure_miss_rate": 0.6627353141301883,
+      "false_alarm_rate": 0.03700239247360184,
+      "repetition": "rep_002",
+      "mode": "reference",
+      "seed": 20361015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.18987989923788362,
+      "mean_misclassification_probability": 0.03265342346627594
+    },
+    {
+      "false_negative_count": 3139,
+      "false_positive_count": 453,
+      "pf_test_prediction": 0.028716666666666668,
+      "pf_signed_error_same_set": -0.04476666666666666,
+      "pf_relative_error_same_set": 0.6092084372873667,
+      "region_error": 0.059866666666666665,
+      "region_error_relative_to_failure": 0.8146972102517578,
+      "failure_miss_rate": 0.7119528237695623,
+      "false_alarm_rate": 0.00814880106492058,
+      "repetition": "rep_002",
+      "mode": "reference",
+      "seed": 20361015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.6061408200865895,
+      "mean_misclassification_probability": 0.05946089856769458
+    },
+    {
+      "false_negative_count": 956,
+      "false_positive_count": 91,
+      "pf_test_prediction": 0.05906666666666667,
+      "pf_signed_error_same_set": -0.014416666666666661,
+      "pf_relative_error_same_set": 0.1961896121569517,
+      "region_error": 0.01745,
+      "region_error_relative_to_failure": 0.23746881378997506,
+      "failure_miss_rate": 0.21682921297346336,
+      "false_alarm_rate": 0.0016369556223129642,
+      "repetition": "rep_002",
+      "mode": "reference",
+      "seed": 20361015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.18987989923788362,
+      "mean_misclassification_probability": 0.017616692837276515
+    },
+    {
+      "false_negative_count": 4,
+      "false_positive_count": 5,
+      "pf_test_prediction": 0.0735,
+      "pf_signed_error_same_set": 1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 0.00015,
+      "region_error_relative_to_failure": 0.0020412792016330232,
+      "failure_miss_rate": 0.0009072352007257881,
+      "false_alarm_rate": 8.994261661060244e-05,
+      "repetition": "rep_002",
+      "mode": "reference",
+      "seed": 20361015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.008078342088299328,
+      "mean_misclassification_probability": 0.0010668945807693565
+    },
+    {
+      "false_negative_count": 1,
+      "false_positive_count": 2,
+      "pf_test_prediction": 0.0735,
+      "pf_signed_error_same_set": 1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 5e-05,
+      "region_error_relative_to_failure": 0.0006804264005443411,
+      "failure_miss_rate": 0.00022680880018144704,
+      "false_alarm_rate": 3.597704664424097e-05,
+      "repetition": "rep_002",
+      "mode": "reference",
+      "seed": 20361015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.008078342088299328,
+      "mean_misclassification_probability": 0.000536557442651969
+    },
+    {
+      "false_negative_count": 2,
+      "false_positive_count": 1,
+      "pf_test_prediction": 0.07346666666666667,
+      "pf_signed_error_same_set": -1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 5e-05,
+      "region_error_relative_to_failure": 0.0006804264005443411,
+      "failure_miss_rate": 0.0004536176003628941,
+      "false_alarm_rate": 1.7988523322120486e-05,
+      "repetition": "rep_002",
+      "mode": "reference",
+      "seed": 20361015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.007621163701864775,
+      "mean_misclassification_probability": 0.00038514312797367794
+    },
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_002",
+      "mode": "nh",
+      "seed": 20361015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.0720930860349417
+    },
+    {
+      "false_negative_count": 3289,
+      "false_positive_count": 1377,
+      "pf_test_prediction": 0.04161666666666667,
+      "pf_signed_error_same_set": -0.03186666666666666,
+      "pf_relative_error_same_set": 0.4336584259469267,
+      "region_error": 0.07776666666666666,
+      "region_error_relative_to_failure": 1.0582898616466319,
+      "failure_miss_rate": 0.7459741437967793,
+      "false_alarm_rate": 0.02477019661455991,
+      "repetition": "rep_002",
+      "mode": "nh",
+      "seed": 20361015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.4292127845363982,
+      "mean_misclassification_probability": 0.016790792504839867
+    },
+    {
+      "false_negative_count": 3277,
+      "false_positive_count": 843,
+      "pf_test_prediction": 0.032916666666666664,
+      "pf_signed_error_same_set": -0.04056666666666667,
+      "pf_relative_error_same_set": 0.5520526196416421,
+      "region_error": 0.06866666666666667,
+      "region_error_relative_to_failure": 0.9344522567475618,
+      "failure_miss_rate": 0.743252438194602,
+      "false_alarm_rate": 0.015164325160547571,
+      "repetition": "rep_002",
+      "mode": "nh",
+      "seed": 20361015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.5485363433958297,
+      "mean_misclassification_probability": 0.08268052942090084
+    },
+    {
+      "false_negative_count": 1714,
+      "false_positive_count": 190,
+      "pf_test_prediction": 0.04808333333333333,
+      "pf_signed_error_same_set": -0.0254,
+      "pf_relative_error_same_set": 0.34565661147652527,
+      "region_error": 0.031733333333333336,
+      "region_error_relative_to_failure": 0.43184395554547517,
+      "failure_miss_rate": 0.3887502835110002,
+      "false_alarm_rate": 0.0034178194312028927,
+      "repetition": "rep_002",
+      "mode": "nh",
+      "seed": 20361015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.34052017756808534,
+      "mean_misclassification_probability": 0.0357826790195322
+    },
+    {
+      "false_negative_count": 51,
+      "false_positive_count": 31,
+      "pf_test_prediction": 0.07315,
+      "pf_signed_error_same_set": -0.0003333333333333244,
+      "pf_relative_error_same_set": 0.004536176003628941,
+      "region_error": 0.0013666666666666666,
+      "region_error_relative_to_failure": 0.018598321614878656,
+      "failure_miss_rate": 0.0115672488092538,
+      "false_alarm_rate": 0.0005576442229857351,
+      "repetition": "rep_002",
+      "mode": "nh",
+      "seed": 20361015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.0032779690307361453,
+      "mean_misclassification_probability": 0.006603792973775315
+    },
+    {
+      "false_negative_count": 3,
+      "false_positive_count": 2,
+      "pf_test_prediction": 0.07346666666666667,
+      "pf_signed_error_same_set": -1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 8.333333333333333e-05,
+      "region_error_relative_to_failure": 0.0011340440009072353,
+      "failure_miss_rate": 0.0006804264005443411,
+      "false_alarm_rate": 3.597704664424097e-05,
+      "repetition": "rep_002",
+      "mode": "nh",
+      "seed": 20361015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.007621163701864775,
+      "mean_misclassification_probability": 0.0005968500097101541
+    },
+    {
+      "false_negative_count": 3,
+      "false_positive_count": 1,
+      "pf_test_prediction": 0.07345,
+      "pf_signed_error_same_set": -3.333333333332966e-05,
+      "pf_relative_error_same_set": 0.0004536176003628941,
+      "region_error": 6.666666666666667e-05,
+      "region_error_relative_to_failure": 0.0009072352007257881,
+      "failure_miss_rate": 0.0006804264005443411,
+      "false_alarm_rate": 1.7988523322120486e-05,
+      "repetition": "rep_002",
+      "mode": "nh",
+      "seed": 20361015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.007392574508647499,
+      "mean_misclassification_probability": 0.00039216796103954174
+    },
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_003",
+      "mode": "reference",
+      "seed": 20461015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.03189531246921868
+    },
+    {
+      "false_negative_count": 3439,
+      "false_positive_count": 1140,
+      "pf_test_prediction": 0.035166666666666666,
+      "pf_signed_error_same_set": -0.038316666666666666,
+      "pf_relative_error_same_set": 0.5214334316171467,
+      "region_error": 0.07631666666666667,
+      "region_error_relative_to_failure": 1.038557496030846,
+      "failure_miss_rate": 0.7799954638239963,
+      "false_alarm_rate": 0.020506916587217355,
+      "repetition": "rep_003",
+      "mode": "reference",
+      "seed": 20461015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.5176768023114939,
+      "mean_misclassification_probability": 0.06257084027983198
+    },
+    {
+      "false_negative_count": 3372,
+      "false_positive_count": 1451,
+      "pf_test_prediction": 0.041466666666666666,
+      "pf_signed_error_same_set": -0.032016666666666665,
+      "pf_relative_error_same_set": 0.43569970514855977,
+      "region_error": 0.08038333333333333,
+      "region_error_relative_to_failure": 1.093898843275119,
+      "failure_miss_rate": 0.7647992742118395,
+      "false_alarm_rate": 0.026101347340396826,
+      "repetition": "rep_003",
+      "mode": "reference",
+      "seed": 20461015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.431270087275354,
+      "mean_misclassification_probability": 0.026334983763199073
+    },
+    {
+      "false_negative_count": 981,
+      "false_positive_count": 114,
+      "pf_test_prediction": 0.059033333333333333,
+      "pf_signed_error_same_set": -0.014449999999999998,
+      "pf_relative_error_same_set": 0.19664322975731457,
+      "region_error": 0.01825,
+      "region_error_relative_to_failure": 0.2483556361986845,
+      "failure_miss_rate": 0.22249943297799954,
+      "false_alarm_rate": 0.0020506916587217355,
+      "repetition": "rep_003",
+      "mode": "reference",
+      "seed": 20461015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.19033707762431826,
+      "mean_misclassification_probability": 0.029586753612817384
+    },
+    {
+      "false_negative_count": 9,
+      "false_positive_count": 7,
+      "pf_test_prediction": 0.07345,
+      "pf_signed_error_same_set": -3.333333333332966e-05,
+      "pf_relative_error_same_set": 0.0004536176003628941,
+      "region_error": 0.0002666666666666667,
+      "region_error_relative_to_failure": 0.0036289408029031526,
+      "failure_miss_rate": 0.0020412792016330232,
+      "false_alarm_rate": 0.0001259196632548434,
+      "repetition": "rep_003",
+      "mode": "reference",
+      "seed": 20461015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.007392574508647499,
+      "mean_misclassification_probability": 0.0011066995371076848
+    },
+    {
+      "false_negative_count": 6,
+      "false_positive_count": 1,
+      "pf_test_prediction": 0.0734,
+      "pf_signed_error_same_set": -8.333333333332416e-05,
+      "pf_relative_error_same_set": 0.0011340440009072353,
+      "region_error": 0.00011666666666666667,
+      "region_error_relative_to_failure": 0.0015876616012701294,
+      "failure_miss_rate": 0.0013608528010886822,
+      "false_alarm_rate": 1.7988523322120486e-05,
+      "repetition": "rep_003",
+      "mode": "reference",
+      "seed": 20461015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.00670680692899567,
+      "mean_misclassification_probability": 0.0005676441221888642
+    },
+    {
+      "false_negative_count": 6,
+      "false_positive_count": 1,
+      "pf_test_prediction": 0.0734,
+      "pf_signed_error_same_set": -8.333333333332416e-05,
+      "pf_relative_error_same_set": 0.0011340440009072353,
+      "region_error": 0.00011666666666666667,
+      "region_error_relative_to_failure": 0.0015876616012701294,
+      "failure_miss_rate": 0.0013608528010886822,
+      "false_alarm_rate": 1.7988523322120486e-05,
+      "repetition": "rep_003",
+      "mode": "reference",
+      "seed": 20461015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.00670680692899567,
+      "mean_misclassification_probability": 0.00038289675649664606
+    },
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_003",
+      "mode": "nh",
+      "seed": 20461015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.03189531246921868
+    },
+    {
+      "false_negative_count": 4152,
+      "false_positive_count": 173,
+      "pf_test_prediction": 0.007166666666666667,
+      "pf_signed_error_same_set": -0.06631666666666666,
+      "pf_relative_error_same_set": 0.9024722159219778,
+      "region_error": 0.07208333333333333,
+      "region_error_relative_to_failure": 0.9809480607847585,
+      "failure_miss_rate": 0.9417101383533681,
+      "false_alarm_rate": 0.003112014534726844,
+      "repetition": "rep_003",
+      "mode": "nh",
+      "seed": 20461015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.9017066469165603,
+      "mean_misclassification_probability": 0.002729917312602706
+    },
+    {
+      "false_negative_count": 3584,
+      "false_positive_count": 392,
+      "pf_test_prediction": 0.020283333333333334,
+      "pf_signed_error_same_set": -0.0532,
+      "pf_relative_error_same_set": 0.7239736901791789,
+      "region_error": 0.06626666666666667,
+      "region_error_relative_to_failure": 0.9017917895214335,
+      "failure_miss_rate": 0.8128827398503062,
+      "false_alarm_rate": 0.007051501142271231,
+      "repetition": "rep_003",
+      "mode": "nh",
+      "seed": 20461015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.7218069518545441,
+      "mean_misclassification_probability": 0.04789785291898179
+    },
+    {
+      "false_negative_count": 1815,
+      "false_positive_count": 184,
+      "pf_test_prediction": 0.0463,
+      "pf_signed_error_same_set": -0.02718333333333333,
+      "pf_relative_error_same_set": 0.3699251530959401,
+      "region_error": 0.03331666666666667,
+      "region_error_relative_to_failure": 0.4533907915627126,
+      "failure_miss_rate": 0.4116579723293264,
+      "false_alarm_rate": 0.0033098882912701694,
+      "repetition": "rep_003",
+      "mode": "nh",
+      "seed": 20461015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.36497922124233656,
+      "mean_misclassification_probability": 0.024276141701237635
+    },
+    {
+      "false_negative_count": 27,
+      "false_positive_count": 22,
+      "pf_test_prediction": 0.0734,
+      "pf_signed_error_same_set": -8.333333333332416e-05,
+      "pf_relative_error_same_set": 0.0011340440009072353,
+      "region_error": 0.0008166666666666667,
+      "region_error_relative_to_failure": 0.011113631208890905,
+      "failure_miss_rate": 0.00612383760489907,
+      "false_alarm_rate": 0.0003957475130866507,
+      "repetition": "rep_003",
+      "mode": "nh",
+      "seed": 20461015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.00670680692899567,
+      "mean_misclassification_probability": 0.004969435710501653
+    },
+    {
+      "false_negative_count": 3,
+      "false_positive_count": 3,
+      "pf_test_prediction": 0.07348333333333333,
+      "pf_signed_error_same_set": 0.0,
+      "pf_relative_error_same_set": 0.0,
+      "region_error": 0.0001,
+      "region_error_relative_to_failure": 0.0013608528010886822,
+      "failure_miss_rate": 0.0006804264005443411,
+      "false_alarm_rate": 5.3965569966361464e-05,
+      "repetition": "rep_003",
+      "mode": "nh",
+      "seed": 20461015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.007849752895082052,
+      "mean_misclassification_probability": 0.0006922521409179294
+    },
+    {
+      "false_negative_count": 1,
+      "false_positive_count": 1,
+      "pf_test_prediction": 0.07348333333333333,
+      "pf_signed_error_same_set": 0.0,
+      "pf_relative_error_same_set": 0.0,
+      "region_error": 3.3333333333333335e-05,
+      "region_error_relative_to_failure": 0.0004536176003628941,
+      "failure_miss_rate": 0.00022680880018144704,
+      "false_alarm_rate": 1.7988523322120486e-05,
+      "repetition": "rep_003",
+      "mode": "nh",
+      "seed": 20461015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.007849752895082052,
+      "mean_misclassification_probability": 0.0004203583952585927
+    },
+    {
+      "false_negative_count": 4352,
+      "false_positive_count": 52,
+      "pf_test_prediction": 0.0018166666666666667,
+      "pf_signed_error_same_set": -0.07166666666666667,
+      "pf_relative_error_same_set": 0.9752778407802223,
+      "region_error": 0.0734,
+      "region_error_relative_to_failure": 0.9988659559990928,
+      "failure_miss_rate": 0.9870718983896575,
+      "false_alarm_rate": 0.0009354032127502653,
+      "repetition": "rep_004",
+      "mode": "reference",
+      "seed": 20561015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 0.9750837779393142,
+      "mean_misclassification_probability": 0.07354027194724382
+    },
+    {
+      "false_negative_count": 3351,
+      "false_positive_count": 1476,
+      "pf_test_prediction": 0.04223333333333333,
+      "pf_signed_error_same_set": -0.03125,
+      "pf_relative_error_same_set": 0.4252665003402132,
+      "region_error": 0.08045,
+      "region_error_relative_to_failure": 1.0948060784758449,
+      "failure_miss_rate": 0.760036289408029,
+      "false_alarm_rate": 0.02655106042344984,
+      "repetition": "rep_004",
+      "mode": "reference",
+      "seed": 20561015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.42075498438735814,
+      "mean_misclassification_probability": 0.027807600626927637
+    },
+    {
+      "false_negative_count": 2873,
+      "false_positive_count": 581,
+      "pf_test_prediction": 0.03528333333333333,
+      "pf_signed_error_same_set": -0.0382,
+      "pf_relative_error_same_set": 0.5198457700158766,
+      "region_error": 0.05756666666666667,
+      "region_error_relative_to_failure": 0.7833975958267181,
+      "failure_miss_rate": 0.6516216829212973,
+      "false_alarm_rate": 0.010451332050152003,
+      "repetition": "rep_004",
+      "mode": "reference",
+      "seed": 20561015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.5160766779589728,
+      "mean_misclassification_probability": 0.09558871433506429
+    },
+    {
+      "false_negative_count": 852,
+      "false_positive_count": 95,
+      "pf_test_prediction": 0.060866666666666666,
+      "pf_signed_error_same_set": -0.012616666666666665,
+      "pf_relative_error_same_set": 0.1716942617373554,
+      "region_error": 0.015783333333333333,
+      "region_error_relative_to_failure": 0.21478793377183034,
+      "failure_miss_rate": 0.1932410977545929,
+      "false_alarm_rate": 0.0017089097156014464,
+      "repetition": "rep_004",
+      "mode": "reference",
+      "seed": 20561015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.16519226637041512,
+      "mean_misclassification_probability": 0.021108051742947213
+    },
+    {
+      "false_negative_count": 7,
+      "false_positive_count": 7,
+      "pf_test_prediction": 0.07348333333333333,
+      "pf_signed_error_same_set": 0.0,
+      "pf_relative_error_same_set": 0.0,
+      "region_error": 0.00023333333333333333,
+      "region_error_relative_to_failure": 0.0031753232025402587,
+      "failure_miss_rate": 0.0015876616012701294,
+      "false_alarm_rate": 0.0001259196632548434,
+      "repetition": "rep_004",
+      "mode": "reference",
+      "seed": 20561015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.007849752895082052,
+      "mean_misclassification_probability": 0.0010443805591699423
+    },
+    {
+      "false_negative_count": 6,
+      "false_positive_count": 3,
+      "pf_test_prediction": 0.07343333333333334,
+      "pf_signed_error_same_set": -4.999999999999449e-05,
+      "pf_relative_error_same_set": 0.0006804264005443411,
+      "region_error": 0.00015,
+      "region_error_relative_to_failure": 0.0020412792016330232,
+      "failure_miss_rate": 0.0013608528010886822,
+      "false_alarm_rate": 5.3965569966361464e-05,
+      "repetition": "rep_004",
+      "mode": "reference",
+      "seed": 20561015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.007163985315430222,
+      "mean_misclassification_probability": 0.0005597423217974275
+    },
+    {
+      "false_negative_count": 8,
+      "false_positive_count": 4,
+      "pf_test_prediction": 0.07341666666666667,
+      "pf_signed_error_same_set": -6.666666666665932e-05,
+      "pf_relative_error_same_set": 0.0009072352007257881,
+      "region_error": 0.0002,
+      "region_error_relative_to_failure": 0.0027217056021773644,
+      "failure_miss_rate": 0.0018144704014515763,
+      "false_alarm_rate": 7.195409328848194e-05,
+      "repetition": "rep_004",
+      "mode": "reference",
+      "seed": 20561015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.006935396122212946,
+      "mean_misclassification_probability": 0.0003931483917520092
+    },
+    {
+      "false_negative_count": 4352,
+      "false_positive_count": 52,
+      "pf_test_prediction": 0.0018166666666666667,
+      "pf_signed_error_same_set": -0.07166666666666667,
+      "pf_relative_error_same_set": 0.9752778407802223,
+      "region_error": 0.0734,
+      "region_error_relative_to_failure": 0.9988659559990928,
+      "failure_miss_rate": 0.9870718983896575,
+      "false_alarm_rate": 0.0009354032127502653,
+      "repetition": "rep_004",
+      "mode": "nh",
+      "seed": 20561015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 0.9750837779393142,
+      "mean_misclassification_probability": 0.07354027194724382
+    },
+    {
+      "false_negative_count": 4198,
+      "false_positive_count": 107,
+      "pf_test_prediction": 0.0053,
+      "pf_signed_error_same_set": -0.06818333333333333,
+      "pf_relative_error_same_set": 0.9278748015422998,
+      "region_error": 0.07175,
+      "region_error_relative_to_failure": 0.9764118847811295,
+      "failure_miss_rate": 0.9521433431617147,
+      "false_alarm_rate": 0.0019247719954668921,
+      "repetition": "rep_004",
+      "mode": "nh",
+      "seed": 20561015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.9273086365568981,
+      "mean_misclassification_probability": 0.002114664876533561
+    },
+    {
+      "false_negative_count": 4167,
+      "false_positive_count": 138,
+      "pf_test_prediction": 0.006333333333333333,
+      "pf_signed_error_same_set": -0.06715,
+      "pf_relative_error_same_set": 0.9138126559310501,
+      "region_error": 0.07175,
+      "region_error_relative_to_failure": 0.9764118847811295,
+      "failure_miss_rate": 0.9451122703560898,
+      "false_alarm_rate": 0.0024824162184526274,
+      "repetition": "rep_004",
+      "mode": "nh",
+      "seed": 20561015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.9131361065774255,
+      "mean_misclassification_probability": 0.002132437534637867
+    },
+    {
+      "false_negative_count": 1972,
+      "false_positive_count": 132,
+      "pf_test_prediction": 0.04281666666666667,
+      "pf_signed_error_same_set": -0.03066666666666666,
+      "pf_relative_error_same_set": 0.41732819233386254,
+      "region_error": 0.03506666666666667,
+      "region_error_relative_to_failure": 0.47720571558176456,
+      "failure_miss_rate": 0.4472669539578136,
+      "false_alarm_rate": 0.0023744850785199045,
+      "repetition": "rep_004",
+      "mode": "nh",
+      "seed": 20561015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.41275436262475257,
+      "mean_misclassification_probability": 0.03215897237960839
+    },
+    {
+      "false_negative_count": 17,
+      "false_positive_count": 18,
+      "pf_test_prediction": 0.0735,
+      "pf_signed_error_same_set": 1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 0.0005833333333333334,
+      "region_error_relative_to_failure": 0.007938308006350647,
+      "failure_miss_rate": 0.0038557496030845995,
+      "false_alarm_rate": 0.0003237934197981688,
+      "repetition": "rep_004",
+      "mode": "nh",
+      "seed": 20561015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.008078342088299328,
+      "mean_misclassification_probability": 0.004346920712270583
+    },
+    {
+      "false_negative_count": 2,
+      "false_positive_count": 2,
+      "pf_test_prediction": 0.07348333333333333,
+      "pf_signed_error_same_set": 0.0,
+      "pf_relative_error_same_set": 0.0,
+      "region_error": 6.666666666666667e-05,
+      "region_error_relative_to_failure": 0.0009072352007257881,
+      "failure_miss_rate": 0.0004536176003628941,
+      "false_alarm_rate": 3.597704664424097e-05,
+      "repetition": "rep_004",
+      "mode": "nh",
+      "seed": 20561015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.007849752895082052,
+      "mean_misclassification_probability": 0.0006898676846474169
+    },
+    {
+      "false_negative_count": 0,
+      "false_positive_count": 3,
+      "pf_test_prediction": 0.07353333333333334,
+      "pf_signed_error_same_set": 5.000000000000837e-05,
+      "pf_relative_error_same_set": 0.0006804264005443411,
+      "region_error": 5e-05,
+      "region_error_relative_to_failure": 0.0006804264005443411,
+      "failure_miss_rate": 0.0,
+      "false_alarm_rate": 5.3965569966361464e-05,
+      "repetition": "rep_004",
+      "mode": "nh",
+      "seed": 20561015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.008535520474734071,
+      "mean_misclassification_probability": 0.00043165470795711054
+    },
+    {
+      "false_negative_count": 4254,
+      "false_positive_count": 414,
+      "pf_test_prediction": 0.009483333333333333,
+      "pf_signed_error_same_set": -0.064,
+      "pf_relative_error_same_set": 0.8709457926967566,
+      "region_error": 0.0778,
+      "region_error_relative_to_failure": 1.0587434792469947,
+      "failure_miss_rate": 0.9648446359718758,
+      "false_alarm_rate": 0.007447248655357882,
+      "repetition": "rep_005",
+      "mode": "reference",
+      "seed": 20661015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 0.8699327490593556,
+      "mean_misclassification_probability": 0.08778627017823845
+    },
+    {
+      "false_negative_count": 4210,
+      "false_positive_count": 105,
+      "pf_test_prediction": 0.005066666666666666,
+      "pf_signed_error_same_set": -0.06841666666666667,
+      "pf_relative_error_same_set": 0.9310501247448401,
+      "region_error": 0.07191666666666667,
+      "region_error_relative_to_failure": 0.9786799727829439,
+      "failure_miss_rate": 0.954865048763892,
+      "false_alarm_rate": 0.0018887949488226512,
+      "repetition": "rep_005",
+      "mode": "reference",
+      "seed": 20661015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.9305088852619404,
+      "mean_misclassification_probability": 0.002492529324755739
+    },
+    {
+      "false_negative_count": 3077,
+      "false_positive_count": 556,
+      "pf_test_prediction": 0.031466666666666664,
+      "pf_signed_error_same_set": -0.04201666666666667,
+      "pf_relative_error_same_set": 0.5717849852574279,
+      "region_error": 0.06055,
+      "region_error_relative_to_failure": 0.8239963710591971,
+      "failure_miss_rate": 0.6978906781583125,
+      "false_alarm_rate": 0.010001618967098991,
+      "repetition": "rep_005",
+      "mode": "reference",
+      "seed": 20661015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.5684236032057349,
+      "mean_misclassification_probability": 0.06205310423518986
+    },
+    {
+      "false_negative_count": 656,
+      "false_positive_count": 129,
+      "pf_test_prediction": 0.0647,
+      "pf_signed_error_same_set": -0.008783333333333337,
+      "pf_relative_error_same_set": 0.1195282376956226,
+      "region_error": 0.013083333333333334,
+      "region_error_relative_to_failure": 0.17804490814243593,
+      "failure_miss_rate": 0.14878657291902925,
+      "false_alarm_rate": 0.0023205195085535426,
+      "repetition": "rep_005",
+      "mode": "reference",
+      "seed": 20661015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.11261675193043587,
+      "mean_misclassification_probability": 0.020621218137420246
+    },
+    {
+      "false_negative_count": 10,
+      "false_positive_count": 6,
+      "pf_test_prediction": 0.07341666666666667,
+      "pf_signed_error_same_set": -6.666666666665932e-05,
+      "pf_relative_error_same_set": 0.0009072352007257881,
+      "region_error": 0.0002666666666666667,
+      "region_error_relative_to_failure": 0.0036289408029031526,
+      "failure_miss_rate": 0.0022680880018144706,
+      "false_alarm_rate": 0.00010793113993272293,
+      "repetition": "rep_005",
+      "mode": "reference",
+      "seed": 20661015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.006935396122212946,
+      "mean_misclassification_probability": 0.001049956913953197
+    },
+    {
+      "false_negative_count": 6,
+      "false_positive_count": 5,
+      "pf_test_prediction": 0.07346666666666667,
+      "pf_signed_error_same_set": -1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 0.00018333333333333334,
+      "region_error_relative_to_failure": 0.0024948968019959175,
+      "failure_miss_rate": 0.0013608528010886822,
+      "false_alarm_rate": 8.994261661060244e-05,
+      "repetition": "rep_005",
+      "mode": "reference",
+      "seed": 20661015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.007621163701864775,
+      "mean_misclassification_probability": 0.0005502743508194089
+    },
+    {
+      "false_negative_count": 4,
+      "false_positive_count": 5,
+      "pf_test_prediction": 0.0735,
+      "pf_signed_error_same_set": 1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 0.00015,
+      "region_error_relative_to_failure": 0.0020412792016330232,
+      "failure_miss_rate": 0.0009072352007257881,
+      "false_alarm_rate": 8.994261661060244e-05,
+      "repetition": "rep_005",
+      "mode": "reference",
+      "seed": 20661015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.008078342088299328,
+      "mean_misclassification_probability": 0.0003676893994701923
+    },
+    {
+      "false_negative_count": 4254,
+      "false_positive_count": 414,
+      "pf_test_prediction": 0.009483333333333333,
+      "pf_signed_error_same_set": -0.064,
+      "pf_relative_error_same_set": 0.8709457926967566,
+      "region_error": 0.0778,
+      "region_error_relative_to_failure": 1.0587434792469947,
+      "failure_miss_rate": 0.9648446359718758,
+      "false_alarm_rate": 0.007447248655357882,
+      "repetition": "rep_005",
+      "mode": "nh",
+      "seed": 20661015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 0.8699327490593556,
+      "mean_misclassification_probability": 0.08778627017823845
+    },
+    {
+      "false_negative_count": 3337,
+      "false_positive_count": 5606,
+      "pf_test_prediction": 0.1113,
+      "pf_signed_error_same_set": 0.037816666666666665,
+      "pf_relative_error_same_set": 0.5146291676117033,
+      "region_error": 0.14905,
+      "region_error_relative_to_failure": 2.028351100022681,
+      "failure_miss_rate": 0.7568609662054888,
+      "false_alarm_rate": 0.10084366174380745,
+      "repetition": "rep_005",
+      "mode": "nh",
+      "seed": 20661015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.5265186323051391,
+      "mean_misclassification_probability": 0.1736398204044075
+    },
+    {
+      "false_negative_count": 3489,
+      "false_positive_count": 446,
+      "pf_test_prediction": 0.022766666666666668,
+      "pf_signed_error_same_set": -0.05071666666666666,
+      "pf_relative_error_same_set": 0.6901791789521433,
+      "region_error": 0.06558333333333333,
+      "region_error_relative_to_failure": 0.8924926287139942,
+      "failure_miss_rate": 0.7913359038330687,
+      "false_alarm_rate": 0.008022881401665738,
+      "repetition": "rep_005",
+      "mode": "nh",
+      "seed": 20661015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.6877471620651662,
+      "mean_misclassification_probability": 0.049734977081900666
+    },
+    {
+      "false_negative_count": 1503,
+      "false_positive_count": 190,
+      "pf_test_prediction": 0.0516,
+      "pf_signed_error_same_set": -0.02188333333333333,
+      "pf_relative_error_same_set": 0.29779995463823994,
+      "region_error": 0.028216666666666668,
+      "region_error_relative_to_failure": 0.38398729870718984,
+      "failure_miss_rate": 0.3408936266727149,
+      "false_alarm_rate": 0.0034178194312028927,
+      "repetition": "rep_005",
+      "mode": "nh",
+      "seed": 20661015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.2922878577992347,
+      "mean_misclassification_probability": 0.03484047594031751
+    },
+    {
+      "false_negative_count": 25,
+      "false_positive_count": 26,
+      "pf_test_prediction": 0.0735,
+      "pf_signed_error_same_set": 1.666666666666483e-05,
+      "pf_relative_error_same_set": 0.00022680880018144704,
+      "region_error": 0.00085,
+      "region_error_relative_to_failure": 0.0115672488092538,
+      "failure_miss_rate": 0.005670220004536176,
+      "false_alarm_rate": 0.00046770160637513267,
+      "repetition": "rep_005",
+      "mode": "nh",
+      "seed": 20661015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.008078342088299328,
+      "mean_misclassification_probability": 0.004539141358920962
+    },
+    {
+      "false_negative_count": 2,
+      "false_positive_count": 2,
+      "pf_test_prediction": 0.07348333333333333,
+      "pf_signed_error_same_set": 0.0,
+      "pf_relative_error_same_set": 0.0,
+      "region_error": 6.666666666666667e-05,
+      "region_error_relative_to_failure": 0.0009072352007257881,
+      "failure_miss_rate": 0.0004536176003628941,
+      "false_alarm_rate": 3.597704664424097e-05,
+      "repetition": "rep_005",
+      "mode": "nh",
+      "seed": 20661015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.007849752895082052,
+      "mean_misclassification_probability": 0.0006553646170625952
+    },
+    {
+      "false_negative_count": 1,
+      "false_positive_count": 1,
+      "pf_test_prediction": 0.07348333333333333,
+      "pf_signed_error_same_set": 0.0,
+      "pf_relative_error_same_set": 0.0,
+      "region_error": 3.3333333333333335e-05,
+      "region_error_relative_to_failure": 0.0004536176003628941,
+      "failure_miss_rate": 0.00022680880018144704,
+      "false_alarm_rate": 1.7988523322120486e-05,
+      "repetition": "rep_005",
+      "mode": "nh",
+      "seed": 20661015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.007849752895082052,
+      "mean_misclassification_probability": 0.0004133574468725153
+    },
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_006",
+      "mode": "reference",
+      "seed": 20761015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.04046470027364723
+    },
+    {
+      "false_negative_count": 3046,
+      "false_positive_count": 1482,
+      "pf_test_prediction": 0.04741666666666667,
+      "pf_signed_error_same_set": -0.02606666666666666,
+      "pf_relative_error_same_set": 0.3547289634837832,
+      "region_error": 0.07546666666666667,
+      "region_error_relative_to_failure": 1.0269902472215922,
+      "failure_miss_rate": 0.6908596053526876,
+      "false_alarm_rate": 0.026658991563382563,
+      "repetition": "rep_006",
+      "mode": "reference",
+      "seed": 20761015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.34966374529677735,
+      "mean_misclassification_probability": 0.02197636420861233
+    },
+    {
+      "false_negative_count": 2661,
+      "false_positive_count": 661,
+      "pf_test_prediction": 0.04015,
+      "pf_signed_error_same_set": -0.03333333333333333,
+      "pf_relative_error_same_set": 0.45361760036289406,
+      "region_error": 0.05536666666666667,
+      "region_error_relative_to_failure": 0.753458834202767,
+      "failure_miss_rate": 0.6035382172828305,
+      "false_alarm_rate": 0.011890413915921641,
+      "repetition": "rep_006",
+      "mode": "reference",
+      "seed": 20761015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.44932863353952085,
+      "mean_misclassification_probability": 0.08851608401624593
+    },
+    {
+      "false_negative_count": 855,
+      "false_positive_count": 121,
+      "pf_test_prediction": 0.06125,
+      "pf_signed_error_same_set": -0.012233333333333332,
+      "pf_relative_error_same_set": 0.16647765933318212,
+      "region_error": 0.016266666666666665,
+      "region_error_relative_to_failure": 0.22136538897709232,
+      "failure_miss_rate": 0.19392152415513722,
+      "false_alarm_rate": 0.002176611321976579,
+      "repetition": "rep_006",
+      "mode": "reference",
+      "seed": 20761015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.1599347149264172,
+      "mean_misclassification_probability": 0.020541276466663507
+    },
+    {
+      "false_negative_count": 12,
+      "false_positive_count": 8,
+      "pf_test_prediction": 0.07341666666666667,
+      "pf_signed_error_same_set": -6.666666666665932e-05,
+      "pf_relative_error_same_set": 0.0009072352007257881,
+      "region_error": 0.0003333333333333333,
+      "region_error_relative_to_failure": 0.004536176003628941,
+      "failure_miss_rate": 0.0027217056021773644,
+      "false_alarm_rate": 0.00014390818657696389,
+      "repetition": "rep_006",
+      "mode": "reference",
+      "seed": 20761015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.006935396122212946,
+      "mean_misclassification_probability": 0.00109098188699763
+    },
+    {
+      "false_negative_count": 9,
+      "false_positive_count": 6,
+      "pf_test_prediction": 0.07343333333333334,
+      "pf_signed_error_same_set": -4.999999999999449e-05,
+      "pf_relative_error_same_set": 0.0006804264005443411,
+      "region_error": 0.00025,
+      "region_error_relative_to_failure": 0.0034021320027217057,
+      "failure_miss_rate": 0.0020412792016330232,
+      "false_alarm_rate": 0.00010793113993272293,
+      "repetition": "rep_006",
+      "mode": "reference",
+      "seed": 20761015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.007163985315430222,
+      "mean_misclassification_probability": 0.0005658862402623362
+    },
+    {
+      "false_negative_count": 7,
+      "false_positive_count": 5,
+      "pf_test_prediction": 0.07345,
+      "pf_signed_error_same_set": -3.333333333332966e-05,
+      "pf_relative_error_same_set": 0.0004536176003628941,
+      "region_error": 0.0002,
+      "region_error_relative_to_failure": 0.0027217056021773644,
+      "failure_miss_rate": 0.0015876616012701294,
+      "false_alarm_rate": 8.994261661060244e-05,
+      "repetition": "rep_006",
+      "mode": "reference",
+      "seed": 20761015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.007392574508647499,
+      "mean_misclassification_probability": 0.00040326536302334905
+    },
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_006",
+      "mode": "nh",
+      "seed": 20761015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.04046470027364723
+    },
+    {
+      "false_negative_count": 2725,
+      "false_positive_count": 4936,
+      "pf_test_prediction": 0.11033333333333334,
+      "pf_signed_error_same_set": 0.03685000000000001,
+      "pf_relative_error_same_set": 0.5014742572011794,
+      "region_error": 0.12768333333333334,
+      "region_error_relative_to_failure": 1.7375822181900658,
+      "failure_miss_rate": 0.6180539804944432,
+      "false_alarm_rate": 0.08879135111798672,
+      "repetition": "rep_006",
+      "mode": "nh",
+      "seed": 20761015,
+      "n_true_calls": 100,
+      "pf_relative_error_reference": 0.5132604590985357,
+      "mean_misclassification_probability": 0.03436999080958585
+    },
+    {
+      "false_negative_count": 3446,
+      "false_positive_count": 522,
+      "pf_test_prediction": 0.02475,
+      "pf_signed_error_same_set": -0.04873333333333333,
+      "pf_relative_error_same_set": 0.6631889317305512,
+      "region_error": 0.06613333333333334,
+      "region_error_relative_to_failure": 0.8999773191199818,
+      "failure_miss_rate": 0.7815831254252665,
+      "false_alarm_rate": 0.009390009174146894,
+      "repetition": "rep_006",
+      "mode": "nh",
+      "seed": 20761015,
+      "n_true_calls": 200,
+      "pf_relative_error_reference": 0.6605450480723073,
+      "mean_misclassification_probability": 0.06626275108788322
+    },
+    {
+      "false_negative_count": 1540,
+      "false_positive_count": 208,
+      "pf_test_prediction": 0.051283333333333334,
+      "pf_signed_error_same_set": -0.022199999999999998,
+      "pf_relative_error_same_set": 0.3021093218416875,
+      "region_error": 0.029133333333333334,
+      "region_error_relative_to_failure": 0.3964617827171694,
+      "failure_miss_rate": 0.3492855522794284,
+      "false_alarm_rate": 0.0037416128510010613,
+      "repetition": "rep_006",
+      "mode": "nh",
+      "seed": 20761015,
+      "n_true_calls": 300,
+      "pf_relative_error_reference": 0.2966310524703634,
+      "mean_misclassification_probability": 0.03433410068076949
+    },
+    {
+      "false_negative_count": 37,
+      "false_positive_count": 39,
+      "pf_test_prediction": 0.07351666666666666,
+      "pf_signed_error_same_set": 3.333333333332966e-05,
+      "pf_relative_error_same_set": 0.0004536176003628941,
+      "region_error": 0.0012666666666666666,
+      "region_error_relative_to_failure": 0.017237468813789975,
+      "failure_miss_rate": 0.00839192560671354,
+      "false_alarm_rate": 0.000701552409562699,
+      "repetition": "rep_006",
+      "mode": "nh",
+      "seed": 20761015,
+      "n_true_calls": 400,
+      "pf_relative_error_reference": 0.008306931281516603,
+      "mean_misclassification_probability": 0.006719258035373173
+    },
+    {
+      "false_negative_count": 0,
+      "false_positive_count": 2,
+      "pf_test_prediction": 0.07351666666666666,
+      "pf_signed_error_same_set": 3.333333333332966e-05,
+      "pf_relative_error_same_set": 0.0004536176003628941,
+      "region_error": 3.3333333333333335e-05,
+      "region_error_relative_to_failure": 0.0004536176003628941,
+      "failure_miss_rate": 0.0,
+      "false_alarm_rate": 3.597704664424097e-05,
+      "repetition": "rep_006",
+      "mode": "nh",
+      "seed": 20761015,
+      "n_true_calls": 500,
+      "pf_relative_error_reference": 0.008306931281516603,
+      "mean_misclassification_probability": 0.0006605030720938331
+    },
+    {
+      "false_negative_count": 0,
+      "false_positive_count": 2,
+      "pf_test_prediction": 0.07351666666666666,
+      "pf_signed_error_same_set": 3.333333333332966e-05,
+      "pf_relative_error_same_set": 0.0004536176003628941,
+      "region_error": 3.3333333333333335e-05,
+      "region_error_relative_to_failure": 0.0004536176003628941,
+      "failure_miss_rate": 0.0,
+      "false_alarm_rate": 3.597704664424097e-05,
+      "repetition": "rep_006",
+      "mode": "nh",
+      "seed": 20761015,
+      "n_true_calls": 600,
+      "pf_relative_error_reference": 0.008306931281516603,
+      "mean_misclassification_probability": 0.00042059999182833893
+    }
+  ],
+  "aggregate": [
+    {
+      "n_true_calls": 10,
+      "mode": "reference",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.974169421166445,
+      "sd": 0.05202882868521059,
+      "variance": 0.0027069990143549923,
+      "median": 1.0
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "reference",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.9743706055794966,
+      "sd": 0.05162359621139568,
+      "variance": 0.002664995685797226,
+      "median": 1.0
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "reference",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.07418888888888889,
+      "sd": 0.001769389934621742,
+      "variance": 3.1307407407407328e-06,
+      "median": 0.07348333333333333
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "reference",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.9919860890602555,
+      "sd": 0.014266736276362142,
+      "variance": 0.0002035397639792675,
+      "median": 1.0
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "reference",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.0013971086446846913,
+      "sd": 0.0029874743953659964,
+      "variance": 8.925003262967426e-06,
+      "median": 0.0
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "reference",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.06300409268206751,
+      "sd": 0.021766719606808427,
+      "variance": 0.00047379008244141836,
+      "median": 0.07216900061202845
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "nh",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.974169421166445,
+      "sd": 0.05202882868521059,
+      "variance": 0.0027069990143549923,
+      "median": 1.0
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "nh",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.9743706055794966,
+      "sd": 0.05162359621139568,
+      "variance": 0.002664995685797226,
+      "median": 1.0
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "nh",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.07418888888888889,
+      "sd": 0.001769389934621742,
+      "variance": 3.1307407407407328e-06,
+      "median": 0.07348333333333333
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "nh",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.9919860890602555,
+      "sd": 0.014266736276362142,
+      "variance": 0.0002035397639792675,
+      "median": 1.0
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "nh",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.0013971086446846913,
+      "sd": 0.0029874743953659964,
+      "variance": 8.925003262967426e-06,
+      "median": 0.0
+    },
+    {
+      "n_true_calls": 10,
+      "mode": "nh",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.06300409268206751,
+      "sd": 0.021766719606808427,
+      "variance": 0.00047379008244141836,
+      "median": 0.07216900061202845
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "reference",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.47226374925899006,
+      "sd": 0.24967983244672726,
+      "variance": 0.06234001873062579,
+      "median": 0.4229265817229225
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "reference",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.47637408331443254,
+      "sd": 0.2477351725587207,
+      "variance": 0.06137271572269913,
+      "median": 0.42742118394193696
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "reference",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.07733333333333334,
+      "sd": 0.0038913293929510053,
+      "variance": 1.514244444444444e-05,
+      "median": 0.07659166666666667
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "reference",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.7643834580781733,
+      "sd": 0.10294675464951006,
+      "variance": 0.01059803429286642,
+      "median": 0.7489226581991382
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "reference",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.022842426531872666,
+      "sd": 0.011626751857739948,
+      "variance": 0.00013518135876145935,
+      "median": 0.025498731809105793
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "reference",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.027263308306852765,
+      "sd": 0.020211884497597667,
+      "variance": 0.0004085202749442289,
+      "median": 0.024891982417769985
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "nh",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.7033049425555357,
+      "sd": 0.2365534310128871,
+      "variance": 0.055957525723968726,
+      "median": 0.7141126396108497
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "nh",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.7004233764270054,
+      "sd": 0.23962855482750728,
+      "variance": 0.05742184428871966,
+      "median": 0.7085506917668405
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "nh",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.09505277777777778,
+      "sd": 0.034298912222250275,
+      "variance": 0.0011764153796296295,
+      "median": 0.07492499999999999
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "nh",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.8276253118621003,
+      "sd": 0.14095271893074926,
+      "variance": 0.0198676689739708,
+      "median": 0.8492855522794285
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "nh",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.03695142499085583,
+      "sd": 0.045810458593878646,
+      "variance": 0.00209859811658147,
+      "median": 0.013941105574643377
+    },
+    {
+      "n_true_calls": 100,
+      "mode": "nh",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.03862738610276526,
+      "sd": 0.06734683279784996,
+      "variance": 0.0045355958879015595,
+      "median": 0.009760354908721286
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "reference",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.5380974369055729,
+      "sd": 0.08893414273033284,
+      "variance": 0.007909281743179215,
+      "median": 0.5422501405823539
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "reference",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.5416950177666894,
+      "sd": 0.0882414690035559,
+      "variance": 0.007786556851905516,
+      "median": 0.5458153776366523
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "reference",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.0626,
+      "sd": 0.009012368044957872,
+      "variance": 8.122277777777779e-05,
+      "median": 0.060208333333333336
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "reference",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.6967944356241021,
+      "sd": 0.060872442564764366,
+      "variance": 0.0037054542638005365,
+      "median": 0.7049217509639374
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "reference",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.012301151865110061,
+      "sd": 0.006963491132756532,
+      "variance": 4.8490208755978844e-05,
+      "median": 0.010226475508625498
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "reference",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.0656449259797963,
+      "sd": 0.02461723730923335,
+      "variance": 0.0006060083727391105,
+      "median": 0.06198443759828698
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "nh",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.7022625758344648,
+      "sd": 0.11903864267435807,
+      "variance": 0.014170198449753502,
+      "median": 0.6847755025533413
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "nh",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.7045815377636653,
+      "sd": 0.1181114966118864,
+      "variance": 0.013950325631899654,
+      "median": 0.6872306645497845
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "nh",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.06718611111111111,
+      "sd": 0.002593912031975953,
+      "variance": 6.728379629629617e-06,
+      "median": 0.06620000000000001
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "nh",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.8094428063808875,
+      "sd": 0.07018498060585975,
+      "variance": 0.004925931502644909,
+      "median": 0.7869131322295305
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "nh",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.008316693949260373,
+      "sd": 0.004099910308328874,
+      "variance": 1.6809264536341357e-05,
+      "median": 0.007905956000071955
+    },
+    {
+      "n_true_calls": 200,
+      "mode": "nh",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.050584176094731224,
+      "sd": 0.027015720593066464,
+      "variance": 0.0007298491591626354,
+      "median": 0.05226574280299179
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "reference",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.17155466558163002,
+      "sd": 0.03441749197946285,
+      "variance": 0.0011845637541563897,
+      "median": 0.17753608280414937
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "reference",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.17800710667573902,
+      "sd": 0.03414942741276415,
+      "variance": 0.0011661833926196478,
+      "median": 0.18394193694715355
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "reference",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.016491666666666665,
+      "sd": 0.001940095931190574,
+      "variance": 3.763972222222221e-06,
+      "median": 0.016858333333333333
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "reference",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.20121720722764044,
+      "sd": 0.03003873993807355,
+      "variance": 0.0009023258970672149,
+      "median": 0.20537536856430028
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "reference",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.0018408255532969967,
+      "sd": 0.0004292691392692202,
+      "variance": 1.8427199392893717e-07,
+      "median": 0.001879800687161591
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "reference",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.021450684999526102,
+      "sd": 0.0041823071727460385,
+      "variance": 1.7491693287202965e-05,
+      "median": 0.020581247302041875
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "nh",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.35042570927416833,
+      "sd": 0.04997937742556834,
+      "variance": 0.0024979381678474108,
+      "median": 0.35274969940521095
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "nh",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.35548499281772133,
+      "sd": 0.04959010733693283,
+      "variance": 0.002459178745688519,
+      "median": 0.3577908822862327
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "nh",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.03195,
+      "sd": 0.002782564764145961,
+      "variance": 7.742666666666666e-06,
+      "median": 0.032525
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "nh",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.39513873138277766,
+      "sd": 0.043607120543644524,
+      "variance": 0.001901580962107944,
+      "median": 0.4002041279201633
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "nh",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.0031449934941507316,
+      "sd": 0.0005317325542965317,
+      "variance": 2.8273950929871397e-07,
+      "median": 0.003363853861236531
+    },
+    {
+      "n_true_calls": 300,
+      "mode": "nh",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.030979231893400617,
+      "sd": 0.005249026726415157,
+      "variance": 2.755228157462062e-05,
+      "median": 0.03324653653018894
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "reference",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.007392574508647498,
+      "sd": 0.00047949273688471176,
+      "variance": 2.2991328472519144e-07,
+      "median": 0.007278279912038861
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "reference",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.0005292205337567097,
+      "sd": 0.00037037721974494264,
+      "variance": 1.3717928490599352e-07,
+      "median": 0.0005670220004536175
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "reference",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.00022777777777777778,
+      "sd": 8.073734277593311e-05,
+      "variance": 6.518518518518519e-09,
+      "median": 0.00025
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "reference",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.0017766689347546688,
+      "sd": 0.000694148570719772,
+      "variance": 4.818422382323023e-07,
+      "median": 0.0018144704014515763
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "reference",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.0001049330527123695,
+      "sd": 3.8441043633740725e-05,
+      "variance": 1.4777138356511583e-09,
+      "median": 0.00011692540159378317
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "reference",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.0010698681356821657,
+      "sd": 2.4285371949128715e-05,
+      "variance": 5.897792907075278e-10,
+      "median": 0.0010635949584322695
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "nh",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.0070877889176910675,
+      "sd": 0.001953958530851045,
+      "variance": 3.817953940285574e-06,
+      "median": 0.008078342088299328
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "nh",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.0011340440009072353,
+      "sd": 0.0017033325793167238,
+      "variance": 2.9013418757617634e-06,
+      "median": 0.00034021320027217056
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "nh",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.000961111111111111,
+      "sd": 0.0002965855070008697,
+      "variance": 8.796296296296294e-08,
+      "median": 0.0008666666666666666
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "nh",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.006917668405534135,
+      "sd": 0.0026979762425425992,
+      "variance": 7.279075805324282e-06,
+      "median": 0.006010433204808346
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "nh",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 0.0004886882169176065,
+      "sd": 0.00013141064658391352,
+      "variance": 1.7268758035602224e-08,
+      "median": 0.0004766958680361929
+    },
+    {
+      "n_true_calls": 400,
+      "mode": "nh",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.005419944014965711,
+      "sd": 0.001022357990802008,
+      "variance": 1.0452158613567184e-06,
+      "median": 0.005155275504727114
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "reference",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.007392574508647498,
+      "sd": 0.0004794927368847116,
+      "variance": 2.2991328472519125e-07,
+      "median": 0.007392574508647498
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "reference",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.0005292205337567098,
+      "sd": 0.00037037721974494264,
+      "variance": 1.3717928490599352e-07,
+      "median": 0.0004536176003628941
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "reference",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.00014444444444444444,
+      "sd": 6.804138174397718e-05,
+      "variance": 4.62962962962963e-09,
+      "median": 0.00013333333333333334
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "reference",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.0012096469343010508,
+      "sd": 0.0006029304313110118,
+      "variance": 3.635251050008827e-07,
+      "median": 0.0013608528010886822
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "reference",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 5.996174440706829e-05,
+      "sd": 3.3492807693736855e-05,
+      "variance": 1.1217681672096386e-09,
+      "median": 5.3965569966361464e-05
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "reference",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.0005572715177659375,
+      "sd": 1.1874711705310993e-05,
+      "variance": 1.4100877808424991e-10,
+      "median": 0.0005616334753365234
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "nh",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.00796404749169069,
+      "sd": 0.0002799634420483999,
+      "variance": 7.837952888358777e-08,
+      "median": 0.007849752895082052
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "nh",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.00018900733348453918,
+      "sd": 0.0002229966160694432,
+      "variance": 4.972749077842265e-08,
+      "median": 0.00011340440009072352
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "nh",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 8.611111111111112e-05,
+      "sd": 4.523600663516063e-05,
+      "variance": 2.0462962962962962e-09,
+      "median": 7.500000000000001e-05
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "nh",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.0005292205337567098,
+      "sd": 0.00030987981449942086,
+      "variance": 9.602549943419548e-08,
+      "median": 0.0005670220004536175
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "nh",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 5.096748274600804e-05,
+      "sd": 2.8819089038868204e-05,
+      "variance": 8.305398930302135e-10,
+      "median": 3.597704664424097e-05
+    },
+    {
+      "n_true_calls": 500,
+      "mode": "nh",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.0006696291824926636,
+      "sd": 4.323598307130557e-05,
+      "variance": 1.869350232142222e-09,
+      "median": 0.000675185378370625
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "reference",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.007468770906386591,
+      "sd": 0.0005722344397207714,
+      "variance": 3.2745225400254524e-07,
+      "median": 0.0075068691052561365
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "reference",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.0005292205337567098,
+      "sd": 0.00039718531901606404,
+      "variance": 1.5775617764189256e-07,
+      "median": 0.00034021320027217056
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "reference",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 0.0001388888888888889,
+      "sd": 5.741338081228362e-05,
+      "variance": 3.2962962962962967e-09,
+      "median": 0.00013333333333333334
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "reference",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.0011340440009072353,
+      "sd": 0.0005367275829530157,
+      "variance": 2.880764983025864e-07,
+      "median": 0.001134044000907235
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "reference",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 5.996174440706829e-05,
+      "sd": 3.3492807693736855e-05,
+      "variance": 1.1217681672096386e-09,
+      "median": 7.195409328848194e-05
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "reference",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.00038893923093580806,
+      "sd": 1.3289191458588408e-05,
+      "variance": 1.7660260962301912e-10,
+      "median": 0.0003891457598628436
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "nh",
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.008040243889429814,
+      "sd": 0.00041942639182695617,
+      "variance": 1.7591849816097936e-07,
+      "median": 0.008078342088299328
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "nh",
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": 0.0003402132002721706,
+      "sd": 0.00027778291480870694,
+      "variance": 7.716334775962135e-08,
+      "median": 0.0004536176003628941
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "nh",
+      "metric": "region_error",
+      "n": 6,
+      "mean": 5.833333333333334e-05,
+      "sd": 3.908679799852858e-05,
+      "variance": 1.5277777777777782e-09,
+      "median": 4.166666666666667e-05
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "nh",
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": 0.0003024117335752627,
+      "sd": 0.0003098798144994208,
+      "variance": 9.602549943419545e-08,
+      "median": 0.00022680880018144704
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "nh",
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": 3.897513386459439e-05,
+      "sd": 2.88190890388682e-05,
+      "variance": 8.305398930302133e-10,
+      "median": 2.698278498318073e-05
+    },
+    {
+      "n_true_calls": 600,
+      "mode": "nh",
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 0.00041934128117954785,
+      "sd": 1.5957455766186615e-05,
+      "variance": 2.5464039452980243e-10,
+      "median": 0.00042047919354346584
+    }
+  ],
+  "paired_differences": [
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 10,
+      "metric": "region_error",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 10,
+      "metric": "failure_miss_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 10,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 10,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 10,
+      "metric": "region_error",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 10,
+      "metric": "failure_miss_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 10,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 10,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 10,
+      "metric": "region_error",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 10,
+      "metric": "failure_miss_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 10,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 10,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 10,
+      "metric": "region_error",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 10,
+      "metric": "failure_miss_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 10,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 10,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 10,
+      "metric": "region_error",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 10,
+      "metric": "failure_miss_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 10,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 10,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 10,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 10,
+      "metric": "region_error",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 10,
+      "metric": "failure_miss_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 10,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 10,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.496724316861196
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.4928555227942844
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 100,
+      "metric": "region_error",
+      "difference": -0.004883333333333337
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 100,
+      "metric": "failure_miss_rate",
+      "difference": 0.21320027217056026
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 100,
+      "metric": "false_alarm_rate",
+      "difference": -0.022179849256174562
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 100,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.013959961226090889
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.2393328852985146
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.23746881378997503
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 100,
+      "metric": "region_error",
+      "difference": -0.005216666666666675
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 100,
+      "metric": "failure_miss_rate",
+      "difference": 0.08323882966659102
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 100,
+      "metric": "false_alarm_rate",
+      "difference": -0.012232195859041929
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 100,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.015862630961436076
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.3840298446050664
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.38103878430483107
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 100,
+      "metric": "region_error",
+      "difference": -0.004233333333333339
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 100,
+      "metric": "failure_miss_rate",
+      "difference": 0.16171467452937183
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 100,
+      "metric": "false_alarm_rate",
+      "difference": -0.01739490205249051
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 100,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.059840922967229274
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.50655365216954
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.5026083012020867
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 100,
+      "metric": "region_error",
+      "difference": -0.0087
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 100,
+      "metric": "failure_miss_rate",
+      "difference": 0.19210705375368564
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 100,
+      "metric": "false_alarm_rate",
+      "difference": -0.024626288427982947
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 100,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.025692935750394077
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_reference",
+      "difference": -0.40399025295680135
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.41642095713313676
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 100,
+      "metric": "region_error",
+      "difference": 0.07713333333333332
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 100,
+      "metric": "failure_miss_rate",
+      "difference": -0.19800408255840318
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 100,
+      "metric": "false_alarm_rate",
+      "difference": 0.0989548667949848
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 100,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.17114729107965176
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.16359671380175833
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 100,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.14674529371739625
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 100,
+      "metric": "region_error",
+      "difference": 0.052216666666666675
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 100,
+      "metric": "failure_miss_rate",
+      "difference": -0.07280562485824449
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 100,
+      "metric": "false_alarm_rate",
+      "difference": 0.06213235955460416
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 100,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.012393626600973522
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.024459043674251224
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.02426854161941483
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 200,
+      "metric": "region_error",
+      "difference": 0.0028500000000000053
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 200,
+      "metric": "failure_miss_rate",
+      "difference": 0.031526423225221145
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 200,
+      "metric": "false_alarm_rate",
+      "difference": 0.0005756327463078562
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 200,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.0071192624373011895
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_reference",
+      "difference": -0.057604476690759854
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.05715581764572464
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 200,
+      "metric": "region_error",
+      "difference": 0.008800000000000002
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 200,
+      "metric": "failure_miss_rate",
+      "difference": 0.0312996144250397
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 200,
+      "metric": "false_alarm_rate",
+      "difference": 0.007015524095626991
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 200,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.023219630853206268
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.29053686457919015
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.28827398503061913
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 200,
+      "metric": "region_error",
+      "difference": -0.014116666666666666
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 200,
+      "metric": "failure_miss_rate",
+      "difference": 0.04808346563846677
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 200,
+      "metric": "false_alarm_rate",
+      "difference": -0.019049846198125595
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 200,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.02156286915578272
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.39705942861845267
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.3939668859151735
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 200,
+      "metric": "region_error",
+      "difference": 0.014183333333333326
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 200,
+      "metric": "failure_miss_rate",
+      "difference": 0.2934905874347925
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 200,
+      "metric": "false_alarm_rate",
+      "difference": -0.007968915831699376
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 200,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.09345627680042642
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.11932355885943124
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.11839419369471538
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 200,
+      "metric": "region_error",
+      "difference": 0.005033333333333327
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 200,
+      "metric": "failure_miss_rate",
+      "difference": 0.09344522567475622
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 200,
+      "metric": "false_alarm_rate",
+      "difference": -0.0019787375654332535
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 200,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.012318127153289192
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.21121641453278645
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 200,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.2095713313676571
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 200,
+      "metric": "region_error",
+      "difference": 0.010766666666666667
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 200,
+      "metric": "failure_miss_rate",
+      "difference": 0.178044908142436
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 200,
+      "metric": "false_alarm_rate",
+      "difference": -0.002500404741774747
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 200,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.022253332928362707
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.18401430053992768
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.18258108414606486
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 300,
+      "metric": "region_error",
+      "difference": 0.016116666666666665
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 300,
+      "metric": "failure_miss_rate",
+      "difference": 0.20095259696076206
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 300,
+      "metric": "false_alarm_rate",
+      "difference": 0.0014570703890917597
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 300,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.005252904438906726
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.15064027833020172
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.14946699931957358
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 300,
+      "metric": "region_error",
+      "difference": 0.014283333333333335
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 300,
+      "metric": "failure_miss_rate",
+      "difference": 0.17192107053753686
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 300,
+      "metric": "false_alarm_rate",
+      "difference": 0.0017808638088899285
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 300,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.018165986182255685
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.1746421436180183
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.17328192333862552
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 300,
+      "metric": "region_error",
+      "difference": 0.01506666666666667
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 300,
+      "metric": "failure_miss_rate",
+      "difference": 0.18915853935132684
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 300,
+      "metric": "false_alarm_rate",
+      "difference": 0.001259196632548434
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 300,
+      "metric": "mean_misclassification_probability",
+      "difference": -0.005310611911579749
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.24756209625433745
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.24563393059650712
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 300,
+      "metric": "region_error",
+      "difference": 0.019283333333333336
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 300,
+      "metric": "failure_miss_rate",
+      "difference": 0.2540258562032207
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 300,
+      "metric": "false_alarm_rate",
+      "difference": 0.0006655753629184582
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 300,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.011050920636661174
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.17967110586879886
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.17827171694261734
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 300,
+      "metric": "region_error",
+      "difference": 0.015133333333333334
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 300,
+      "metric": "failure_miss_rate",
+      "difference": 0.19210705375368564
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 300,
+      "metric": "false_alarm_rate",
+      "difference": 0.00109729992264935
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 300,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.014219257802897262
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.13669633754394622
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 300,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.13563166250850536
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 300,
+      "metric": "region_error",
+      "difference": 0.012866666666666669
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 300,
+      "metric": "failure_miss_rate",
+      "difference": 0.1553640281242912
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 300,
+      "metric": "false_alarm_rate",
+      "difference": 0.0015650015290244825
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 300,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.013792824214105982
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0009143567728691062
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.0004536176003628941
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 400,
+      "metric": "region_error",
+      "difference": 0.0007666666666666666
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 400,
+      "metric": "failure_miss_rate",
+      "difference": 0.004762984803810388
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 400,
+      "metric": "false_alarm_rate",
+      "difference": 0.0004497130830530122
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 400,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.004280819962857394
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_reference",
+      "difference": -0.0048003730575631835
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.004309367203447494
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 400,
+      "metric": "region_error",
+      "difference": 0.0012166666666666667
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 400,
+      "metric": "failure_miss_rate",
+      "difference": 0.010660013608528012
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 400,
+      "metric": "false_alarm_rate",
+      "difference": 0.0004677016063751326
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 400,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.005536898393005959
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_reference",
+      "difference": -0.0006857675796518286
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0006804264005443412
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 400,
+      "metric": "region_error",
+      "difference": 0.00055
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 400,
+      "metric": "failure_miss_rate",
+      "difference": 0.004082558403266047
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 400,
+      "metric": "false_alarm_rate",
+      "difference": 0.0002698278498318073
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 400,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.003862736173393968
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.00022858919321727678
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.00022680880018144704
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 400,
+      "metric": "region_error",
+      "difference": 0.00035000000000000005
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 400,
+      "metric": "failure_miss_rate",
+      "difference": 0.00226808800181447
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 400,
+      "metric": "false_alarm_rate",
+      "difference": 0.00019787375654332538
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 400,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.0033025401531006403
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0011429459660863821
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.0006804264005443411
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 400,
+      "metric": "region_error",
+      "difference": 0.0005833333333333333
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 400,
+      "metric": "failure_miss_rate",
+      "difference": 0.0034021320027217057
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 400,
+      "metric": "false_alarm_rate",
+      "difference": 0.00035977046644240974
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 400,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.003489184444967765
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0013715351593036572
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 400,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.0004536176003628941
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 400,
+      "metric": "region_error",
+      "difference": 0.0009333333333333333
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 400,
+      "metric": "failure_miss_rate",
+      "difference": 0.005670220004536175
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 400,
+      "metric": "false_alarm_rate",
+      "difference": 0.0005576442229857351
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 400,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.0056282761483755425
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0006857675796518286
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.00022680880018144704
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 500,
+      "metric": "region_error",
+      "difference": 4.9999999999999996e-05
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 500,
+      "metric": "failure_miss_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 500,
+      "metric": "false_alarm_rate",
+      "difference": 5.3965569966361464e-05
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 500,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.00015941294164843343
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_reference",
+      "difference": -0.00045717838643455355
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 500,
+      "metric": "region_error",
+      "difference": 3.333333333333333e-05
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 500,
+      "metric": "failure_miss_rate",
+      "difference": 0.0004536176003628941
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 500,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 500,
+      "metric": "mean_misclassification_probability",
+      "difference": 6.0292567058185115e-05
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0011429459660863813
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.0011340440009072353
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 500,
+      "metric": "region_error",
+      "difference": -1.666666666666666e-05
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 500,
+      "metric": "failure_miss_rate",
+      "difference": -0.0006804264005443411
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 500,
+      "metric": "false_alarm_rate",
+      "difference": 3.597704664424098e-05
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 500,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.00012460801872906518
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0006857675796518295
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.0006804264005443411
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 500,
+      "metric": "region_error",
+      "difference": -8.333333333333332e-05
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 500,
+      "metric": "failure_miss_rate",
+      "difference": -0.0009072352007257881
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 500,
+      "metric": "false_alarm_rate",
+      "difference": -1.7988523322120492e-05
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 500,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.00013012536284998945
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.00022858919321727678
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.00022680880018144704
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 500,
+      "metric": "region_error",
+      "difference": -0.00011666666666666667
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 500,
+      "metric": "failure_miss_rate",
+      "difference": -0.0009072352007257881
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 500,
+      "metric": "false_alarm_rate",
+      "difference": -5.3965569966361464e-05
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 500,
+      "metric": "mean_misclassification_probability",
+      "difference": 0.00010509026624318631
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0011429459660863813
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 500,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.00022680880018144704
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 500,
+      "metric": "region_error",
+      "difference": -0.00021666666666666666
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 500,
+      "metric": "failure_miss_rate",
+      "difference": -0.0020412792016330232
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 500,
+      "metric": "false_alarm_rate",
+      "difference": -7.195409328848196e-05
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 500,
+      "metric": "mean_misclassification_probability",
+      "difference": 9.461683183149686e-05
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.00022858919321727504
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.00022680880018144704
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 600,
+      "metric": "region_error",
+      "difference": 1.6666666666666674e-05
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 600,
+      "metric": "failure_miss_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 600,
+      "metric": "false_alarm_rate",
+      "difference": 1.7988523322120492e-05
+    },
+    {
+      "repetition": "rep_001",
+      "n_true_calls": 600,
+      "metric": "mean_misclassification_probability",
+      "difference": 3.641683722221392e-05
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_reference",
+      "difference": -0.0002285891932172759
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.00022680880018144704
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 600,
+      "metric": "region_error",
+      "difference": 1.6666666666666667e-05
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 600,
+      "metric": "failure_miss_rate",
+      "difference": 0.00022680880018144704
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 600,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_002",
+      "n_true_calls": 600,
+      "metric": "mean_misclassification_probability",
+      "difference": 7.0248330658638026e-06
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0011429459660863813
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.0011340440009072353
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 600,
+      "metric": "region_error",
+      "difference": -8.333333333333333e-05
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 600,
+      "metric": "failure_miss_rate",
+      "difference": -0.001134044000907235
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 600,
+      "metric": "false_alarm_rate",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_003",
+      "n_true_calls": 600,
+      "metric": "mean_misclassification_probability",
+      "difference": 3.746163876194663e-05
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0016001243525211248
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.00022680880018144704
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 600,
+      "metric": "region_error",
+      "difference": -0.00015000000000000001
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 600,
+      "metric": "failure_miss_rate",
+      "difference": -0.0018144704014515763
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 600,
+      "metric": "false_alarm_rate",
+      "difference": -1.798852332212048e-05
+    },
+    {
+      "repetition": "rep_004",
+      "n_true_calls": 600,
+      "metric": "mean_misclassification_probability",
+      "difference": 3.850631620510133e-05
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_reference",
+      "difference": -0.00022858919321727678
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_same_set",
+      "difference": -0.00022680880018144704
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 600,
+      "metric": "region_error",
+      "difference": -0.00011666666666666665
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 600,
+      "metric": "failure_miss_rate",
+      "difference": -0.0006804264005443411
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 600,
+      "metric": "false_alarm_rate",
+      "difference": -7.195409328848194e-05
+    },
+    {
+      "repetition": "rep_005",
+      "n_true_calls": 600,
+      "metric": "mean_misclassification_probability",
+      "difference": 4.566804740232296e-05
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_reference",
+      "difference": 0.0009143567728691045
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 600,
+      "metric": "pf_relative_error_same_set",
+      "difference": 0.0
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 600,
+      "metric": "region_error",
+      "difference": -0.0001666666666666667
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 600,
+      "metric": "failure_miss_rate",
+      "difference": -0.0015876616012701294
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 600,
+      "metric": "false_alarm_rate",
+      "difference": -5.3965569966361464e-05
+    },
+    {
+      "repetition": "rep_006",
+      "n_true_calls": 600,
+      "metric": "mean_misclassification_probability",
+      "difference": 1.7334628804989882e-05
+    }
+  ],
+  "paired_summary": [
+    {
+      "metric": "pf_relative_error_reference",
+      "n": 6,
+      "mean": 0.0005714729830432222,
+      "sd": 0.0007615829001091273,
+      "variance": 5.800085137386291e-07,
+      "median": 0.0005714729830431898,
+      "ci_low": -0.00022775925506663937,
+      "ci_high": 0.0013707052211530838,
+      "nh_wins": 2,
+      "ties": 0,
+      "nh_losses": 4
+    },
+    {
+      "metric": "pf_relative_error_same_set",
+      "n": 6,
+      "mean": -0.0001890073334845392,
+      "sd": 0.0005054665351310737,
+      "variance": 2.5549641813741295e-07,
+      "median": -0.00011340440009072352,
+      "ci_low": -0.0007194619302258236,
+      "ci_high": 0.0003414472632567452,
+      "nh_wins": 3,
+      "ties": 1,
+      "nh_losses": 2
+    },
+    {
+      "metric": "region_error",
+      "n": 6,
+      "mean": -8.055555555555556e-05,
+      "sd": 8.056513353021108e-05,
+      "variance": 6.490740740740742e-09,
+      "median": -9.999999999999999e-05,
+      "ci_low": -0.00016510347801513805,
+      "ci_high": 3.992366904026934e-06,
+      "nh_wins": 4,
+      "ties": 0,
+      "nh_losses": 2
+    },
+    {
+      "metric": "failure_miss_rate",
+      "n": 6,
+      "mean": -0.0008316322673319725,
+      "sd": 0.0008323192829529227,
+      "variance": 6.927553887752674e-07,
+      "median": -0.0009072352007257881,
+      "ci_low": -0.00170509778663544,
+      "ci_high": 4.1833251971494794e-05,
+      "nh_wins": 4,
+      "ties": 1,
+      "nh_losses": 1
+    },
+    {
+      "metric": "false_alarm_rate",
+      "n": 6,
+      "mean": -2.09866105424739e-05,
+      "sd": 3.491195008307013e-05,
+      "variance": 1.2188442586027805e-09,
+      "median": -8.99426166106024e-06,
+      "ci_low": -5.7624455217917265e-05,
+      "ci_high": 1.5651234132969468e-05,
+      "nh_wins": 3,
+      "ties": 2,
+      "nh_losses": 1
+    },
+    {
+      "metric": "mean_misclassification_probability",
+      "n": 6,
+      "mean": 3.0402050243739753e-05,
+      "sd": 1.4845854872661617e-05,
+      "variance": 2.203994069001307e-10,
+      "median": 3.693923799208027e-05,
+      "ci_low": 1.482228103564519e-05,
+      "ci_high": 4.5981819451834316e-05,
+      "nh_wins": 0,
+      "ties": 0,
+      "nh_losses": 6
+    }
+  ]
+}

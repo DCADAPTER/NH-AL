@@ -14,6 +14,7 @@ from metamodels.contracts import Prediction
 from pipeline import ROOT, execute, prepare, prepare_runs, read_config, run
 
 Stop = importlib.import_module('stop.AK-MCS-U').Stop
+EFFStop = importlib.import_module('stop.AK-MCS-EFF').Stop
 
 
 class StopTests(unittest.TestCase):
@@ -113,6 +114,65 @@ class StopTests(unittest.TestCase):
                 self.assertEqual(result['expand_population'], expand)
         with self.assertRaises(ValueError):
             stop.evaluate(None, Acquisition(), [[float('nan')]], {'mc_cov': .01})
+
+    def test_eff_stop_uses_paper_threshold_and_config(self):
+        class Model:
+            X = []
+
+        class Acquisition:
+            kind = "eff"
+            def score_many(self, points):
+                import numpy as np
+                return np.asarray([.001, .0009])
+
+        stop = EFFStop({'population_mode': 'holdout', 'max_eff': .001,
+                        'max_mc_cov': .05})
+        result = stop.evaluate(Model(), Acquisition(), [[1], [2]],
+                               {'mc_cov': .05})
+        json.dumps(result, allow_nan=False)
+        self.assertEqual(result['population_max_eff'], .001)
+        self.assertTrue(result['learning_converged'])
+        self.assertTrue(result['converged'])
+        self.assertEqual(result['stop_reason'], 'converged_holdout_eff')
+
+        class AboveThreshold(Acquisition):
+            def score_many(self, points):
+                return [.001001, .0009]
+
+        result = stop.evaluate(Model(), AboveThreshold(), [[1], [2]],
+                               {'mc_cov': .01})
+        self.assertFalse(result['learning_converged'])
+        self.assertFalse(result['converged'])
+
+        cfg = read_config(ROOT/'configs/AK-MCS-EFF.yaml')
+        self.assertEqual(cfg['acquisition']['factory'],
+                         'adaptive:EFFAcquisition')
+        self.assertEqual(cfg['evaluation']['stop']['factory'],
+                         'stop.AK-MCS-EFF:Stop')
+        self.assertEqual(cfg['evaluation']['stop']['max_eff'], .001)
+        pipeline = prepare(cfg, 'reference')
+        self.assertEqual(pipeline.acquisition.kind, 'eff')
+        self.assertIsInstance(pipeline.evaluator.stop_plugin, EFFStop)
+
+    def test_eff_stop_serializes_numpy_scores_in_pipeline(self):
+        cfg = self.config()
+        cfg['acquisition'] = {'factory': 'adaptive:EFFAcquisition'}
+        cfg['evaluation']['stop'] = {
+            'factory': 'stop.AK-MCS-EFF:Stop',
+            'population_mode': 'shared',
+            'max_eff': .001,
+            'max_mc_cov': .05,
+        }
+        cfg['evaluation']['max_true_calls'] = cfg['initial_design']['size']
+        cfg['evaluation']['max_population_size'] = cfg['evaluation']['integration_size']
+        with tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stdout(io.StringIO()):
+            out = Path(tmp)/'eff'
+            run(cfg, 'reference', out)
+            rows = [json.loads(line) for line in
+                    (out/'evaluation.jsonl').read_text().splitlines()]
+        self.assertTrue(rows)
+        self.assertIs(type(rows[0]['learning_converged']), bool)
+        self.assertIs(type(rows[0]['converged']), bool)
 
     def test_observed_population_points_do_not_hold_down_min_u(self):
         class Model:

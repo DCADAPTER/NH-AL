@@ -41,6 +41,84 @@ class UAcquisition:
         dm, dv = prediction.require('mean_gradient'), prediction.require('epistemic_variance_gradient')
         return [2*mu*a/var - mu*mu*b/(var*var) for a,b in zip(dm,dv)]
 
+
+class EFFAcquisition:
+    """Expected Feasibility Function acquisition from P01, Eq. (14).
+
+    For reliability problems the paper uses limit state zero and epsilon equal
+    to twice the Kriging standard deviation. EFF is maximized; NH minimizes
+    its negative.
+    """
+    direction = "max"
+    kind = "eff"
+    capabilities = frozenset({"score", "score_many", "energy", "energy_gradient"})
+    required_capabilities = frozenset({"mean", "epistemic_variance"})
+    gradient_required_capabilities = frozenset({"mean_gradient", "epistemic_variance_gradient"})
+    gradient_kind = "analytic_energy_negative_eff"
+
+    def __init__(self, model):
+        self.model = model
+        self.limit_state = 0.0
+        self.epsilon_multiplier = 2.0
+        self.score_points = 0
+        self.energy_points = 0
+        self.gradient_points = 0
+
+    def _terms(self, mean, variance):
+        import numpy as np
+        from scipy.special import ndtr
+
+        sigma = np.sqrt(variance)
+        d = (mean-self.limit_state)/sigma
+        c = self.epsilon_multiplier
+        z0, zlo, zhi = -d, -c-d, c-d
+        root_two_pi = math.sqrt(2*math.pi)
+        phi0 = np.exp(-.5*z0*z0)/root_two_pi
+        philo = np.exp(-.5*zlo*zlo)/root_two_pi
+        phihi = np.exp(-.5*zhi*zhi)/root_two_pi
+        cdf0, cdflo, cdfhi = ndtr(z0), ndtr(zlo), ndtr(zhi)
+        mean_derivative = 2*cdf0-cdflo-cdfhi
+        normalized_eff = (c*(cdfhi-cdflo) + d*mean_derivative
+                          + philo+phihi-2*phi0)
+        eff = np.maximum(sigma*normalized_eff, 0.0)
+        sigma_derivative = normalized_eff-d*mean_derivative
+        return eff, mean_derivative, sigma_derivative, sigma
+
+    def score(self, x):
+        self.score_points += 1
+        prediction = self.model.predict(x)
+        mean = prediction.require("mean")
+        variance = prediction.require("epistemic_variance")
+        return float(self._terms(mean, variance)[0])
+
+    def score_many(self, X):
+        import numpy as np
+        if callable(getattr(self.model, "predict_moments", None)):
+            mean, variance = self.model.predict_moments(X)
+            self.score_points += len(X)
+            return self._terms(mean, variance)[0]
+        return np.asarray([self.score(x) for x in X])
+
+    def energy(self, x):
+        self.energy_points += 1
+        prediction = self.model.predict(x)
+        mean = prediction.require("mean")
+        variance = prediction.require("epistemic_variance")
+        return -float(self._terms(mean, variance)[0])
+
+    def energy_gradient(self, x):
+        import numpy as np
+        self.gradient_points += 1
+        prediction = self.model.predict(x, gradient=True)
+        mean = prediction.require("mean")
+        variance = prediction.require("epistemic_variance")
+        dmean = np.asarray(prediction.require("mean_gradient"), dtype=float)
+        dvariance = np.asarray(prediction.require("epistemic_variance_gradient"), dtype=float)
+        _, mean_derivative, sigma_derivative, sigma = self._terms(mean, variance)
+        gradient = -(mean_derivative*dmean + sigma_derivative*dvariance/(2*sigma))
+        return gradient.tolist()
+
+
 class MeanBoundaryAcquisition:
     """Minimal |predicted g| baseline; no uncertainty-based convergence claim."""
     direction = "min"

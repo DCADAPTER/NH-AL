@@ -27,9 +27,9 @@ class Stop:
         unobserved = (population if self.requires_independent_population else
                       [x for x in population if tuple(x) not in observed])
         minimum = math.inf
-        score_many = getattr(acquisition, "score_many", None)
         scores = ()
         if unobserved:
+            score_many = getattr(acquisition, "score_many", None)
             scores = (score_many(unobserved) if callable(score_many) else
                       (acquisition.score(x) for x in unobserved))
         for value in scores:

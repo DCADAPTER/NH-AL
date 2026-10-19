@@ -3,7 +3,7 @@
 profile: metamodel_demo
 mode: reference
 seed: 20261015
-repetitions: 10                      # rep_001..rep_010; increase and use --resume to append
+repetitions: 100                      # rep_001..rep_010; increase and use --resume to append
 output: runs/AK-MCS-U
 reference:
   id: P01

@@ -1,0 +1,87 @@
+# P01: Echard, Gayton & Lemaire (2011), AK-MCS-EFF, Example 2 (modified Rastrigin).
+# EFF learning/stopping criteria from Section 3.3.1, Eq. (14), and Table 1.
+profile: metamodel_demo
+mode: reference
+seed: 20261015
+repetitions: 100
+output: runs/AK-MCS-EFF
+reference:
+  id: P01
+  name: AK-MCS-EFF
+  doi: 10.1016/j.strusafe.2011.01.002
+  source_pdf: 'C:/Users/dhehr/Documents/GitHub/NH-AL/citations/P01 AK-MCS-U.pdf'
+  implementation: ordinary_kriging_ak_mcs_eff_user_design
+  kriging_equations_verified: true
+  paper_reproduction_verified: false
+  paper_example:
+    section: '4.2, Eq.(18), Table 4'
+    mc_size: 60000
+    reported_pf: 0.0734
+  deviations:
+    - Independent adaptive and evaluation MC sets with holdout EFF stopping are a comparison protocol, not the paper's shared S.
+    - User requests Optimal LHD with 10 points instead of random selection from S.
+    - Python uses a DACE-style boxmin search with warm starts and geometric restarts.
+    - Theta start, bounds, warm starts and numerical regularization are implementation choices not specified in the paper.
+    - Seed, MC expansion increment, call/population caps and optional NH are framework settings.
+problem:
+  factory: g:Problem
+  type: rastrigin
+  dimension: 2
+  search_bound: null
+initial_design:
+  size: 10
+  method: optimal_lhd
+  seed: 20261026
+  restarts: 8
+  iterations: 2000
+  input_file: null
+metamodel:
+  factory: metamodels.ordinary_kriging:OrdinaryKriging
+  # Eq. (6): exp(-sum(theta_j * delta_j^2)); constant GLS trend, profile MLE.
+  # theta is in sample-standardized input coordinates (DACE convention).
+  theta: [1.0, 1.0]
+  theta_bounds: [0.001, 1000.0]
+  nugget: 1.0e-6
+  optimize: true
+  optimizer_restarts: 2
+  batch_size: 4096
+acquisition:
+  factory: adaptive:EFFAcquisition
+  type: EFF
+  direction: max
+sampling:
+  factory: adaptive:BatchedPoolSelector
+  population: independent
+  pool_size: 60000
+  min_distance: 1.0e-6
+nh:
+  factory: nh:NestedHamiltonianPrototype
+  status: illustrative_not_verified_user_NH
+  dt: 0.03
+  steps: 15
+  max_paths: 4
+  max_depth: 1
+  max_retries: 6
+  mass: 1
+  temperature: 0.2
+  energy_tolerance: 0.001
+  child:
+    method: lbfgsb
+    radius: 0.5
+    maxiter: 30
+    maxfun: 80
+    maxls: 20
+    ftol: 1.0e-12
+    gtol: 1.0e-6
+evaluation:
+  factory: evaluation:PluginMCEvaluation
+  integration_size: 60000
+  audit_size: 1
+  max_true_calls: 600
+  population_increment: 60000
+  max_population_size: 2000000
+  stop:
+    factory: stop.AK-MCS-EFF:Stop
+    population_mode: holdout
+    max_eff: 0.001
+    max_mc_cov: 0.05

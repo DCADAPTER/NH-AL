@@ -1,0 +1,92 @@
+{
+  "signature": {
+    "cache_version": 2,
+    "truth": {
+      "experiment": "c:\\Users\\user\\Desktop\\LAB\\NH-AL\\NH-AL\\runs\\repeated_01",
+      "problem": {
+        "factory": "g:Problem",
+        "type": "rastrigin",
+        "dimension": 2,
+        "search_bound": null
+      },
+      "test_seed": 2026101801,
+      "reference_seed": 2026101802,
+      "n_test": 60000,
+      "n_reference": 1000000,
+      "test_failures": 4409,
+      "reference_failures": 72911,
+      "pf_test_true": 0.07348333333333333,
+      "pf_reference": 0.072911,
+      "reference_mc_95_wilson": [
+        0.07240306723876606,
+        0.0734222140382416
+      ],
+      "checkpoints": [
+        10,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600
+      ],
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "code_hashes": {
+        "g.py": "8855132f929a115f1f8f8264a44209b7bf74117b59d82ebef2ca3f5d97934a6e",
+        "metamodels/ordinary_kriging.py": "13ea56e7b84b819ad6b034e8434ba3b8e89a6fa1acb4b1b903855e9864537aca",
+        "metamodels/base.py": "9213664948aeb5ac4b75ff4659895c33e098f141a42d6b79746e94ec0aeedc1c"
+      }
+    },
+    "runs": {
+      "reference": {
+        "effective_config.json": "5d857ae832bd109d7abfd5c8eae7937768dfcc852b9d14684d218840bcd4d6be",
+        "evaluation.jsonl": "e5f3e305c69414966456742622a3aa5cd526a5d243897f1ace39c2ec8e7098c7",
+        "g_calls.jsonl": "1f25c428d0eb58a730a48f3e16b7352e089de92fc5409c2c7357cf6d9ff738a9",
+        "initial_design.json": "b38213d61fee11d8e73fe9bcc9d1ab39e8231c1cff21066ff40b185dd5406df0"
+      },
+      "nh": {
+        "effective_config.json": "bc0e0fd5908029a35767a3b439be927f082fdb3f58a17b5c7722a2620af92959",
+        "evaluation.jsonl": "ecb55f31b455661ffe0f22db0079d40a7f7cc37db493e929b93a82b39ebdebbf",
+        "g_calls.jsonl": "a095935c38c4ca02626e57f4234e4ff7957e65a7d4d31518db163a69896635f6",
+        "initial_design.json": "b38213d61fee11d8e73fe9bcc9d1ab39e8231c1cff21066ff40b185dd5406df0"
+      }
+    }
+  },
+  "metrics": [
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_019",
+      "mode": "reference",
+      "seed": 22061015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.00035360325979868465
+    },
+    {
+      "false_negative_count": 4409,
+      "false_positive_count": 0,
+      "pf_test_prediction": 0.0,
+      "pf_signed_error_same_set": -0.07348333333333333,
+      "pf_relative_error_same_set": 1.0,
+      "region_error": 0.07348333333333333,
+      "region_error_relative_to_failure": 1.0,
+      "failure_miss_rate": 1.0,
+      "false_alarm_rate": 0.0,
+      "repetition": "rep_019",
+      "mode": "nh",
+      "seed": 22061015,
+      "n_true_calls": 10,
+      "pf_relative_error_reference": 1.0,
+      "mean_misclassification_probability": 0.00035360325979868465
+    }
+  ]
+}

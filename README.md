@@ -70,7 +70,8 @@ python run.py --config configs/AK-MCS-U.yaml --mode paired --output runs/repeate
 ```
 
 Outputs are `rep_001/reference`, `rep_001/nh`, etc.; `results.json` collects completed
-summaries. Point Analyze.ipynb's RUN_DIR at one `rep_XXX` folder. Each repetition
+summaries. Point Analyze.ipynb's `EXPERIMENT_DIR` at the experiment root to aggregate
+completed pairs, compare paired differences, and cache reliability metrics. Each repetition
 adds 100,000 to the base RNG and initial-design seeds; both modes share the same
 initial design and populations within a repetition. Explicit metamodel seeds also
 advance. An `initial_design.input_file` intentionally keeps the saved design fixed.
@@ -96,11 +97,17 @@ original single-run output layout unless `--resume` is explicitly used.
 | YAML | Model | Acquisition / stopping |
 |---|---|---|
 | configs/Kriging_GP.yaml | RBF GP with kernel fitting | U / audit U and MC COV |
+| configs/AK-MCS-U.yaml | Ordinary Kriging | U / `stop.AK-MCS-U:Stop` |
+| configs/AK-MCS-EFF.yaml | Ordinary Kriging | EFF / `stop.AK-MCS-EFF:Stop` |
 | configs/SVM.yaml | RBF SVC | absolute decision margin / call budget |
 | configs/PCE.yaml | Hermite PCE with bootstrap | absolute predicted g / call budget |
 | configs/BNN.yaml | Variational BNN | posterior mean/std U / audit U and MC COV |
 
 Each YAML is standalone, without implicit inheritance.
+`configs/AK-MCS-EFF.yaml` uses the paper's reliability settings `a = 0` and
+`epsilon = 2 sigma`, maximizes EFF, and stops learning when
+`max(EFF) <= 0.001`; it also requires the configured MC coefficient-of-variation
+criterion. The U and EFF methods use separate stop plugins.
 Use profile=metamodel_demo for these implementations. P01-P30 remain literature
 specifications; they are not implemented paper reproductions.
 The JSON-formatted YAML examples do not need a YAML parser. Block YAML uses PyYAML.
