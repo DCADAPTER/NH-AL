@@ -19,6 +19,8 @@ def repetition_config(cfg, index):
     design['seed'] = int(cfg['initial_design'].get('seed', int(cfg['seed'])+11)) + offset
     if 'seed' in result['metamodel']:
         result['metamodel']['seed'] += offset
+    if 'response_seed' in result['problem']:
+        result['problem']['response_seed'] += offset
     return result
 
 

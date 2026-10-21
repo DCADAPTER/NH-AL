@@ -5,6 +5,7 @@ _REGISTRY = {
     "gp": ("metamodels.gp:KrigingGP", "RBF Gaussian process regression"),
     "svm": ("metamodels.svm:SVMClassifier", "RBF/linear support vector classification"),
     "pce": ("metamodels.pce:PolynomialChaos", "Hermite PCE with optional bootstrap"),
+    "spce": ("metamodels.spce:StochasticPCE", "Stochastic PCE with MLE coefficient uncertainty"),
     "bnn": ("metamodels.bnn:BayesianNeuralNetwork", "Mean-field variational Bayesian neural network"),
 }
 

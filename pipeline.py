@@ -124,26 +124,55 @@ class Pipeline:
             candidate_seconds=time.perf_counter()-t
             t=time.perf_counter()
             before=(acquisition.score_points,acquisition.energy_points,acquisition.gradient_points)
-            x_ref,a_ref=selector.select(candidates,acquisition,X,problem)
+            select_batch = getattr(selector, "select_batch", None)
+            if callable(select_batch):
+                remaining = cfg["evaluation"]["max_true_calls"] - oracle.n_calls
+                reference_batch = select_batch(
+                    candidates, acquisition, X, problem,
+                    min(getattr(selector, "batch_size", 1), remaining))
+            else:
+                reference_batch = [selector.select(
+                    candidates, acquisition, X, problem)]
             reference_seconds=time.perf_counter()-t
-            x_selected,a_selected=list(x_ref),a_ref
             nh_seconds=rescore_seconds=0.0
-            diagnostics={}
-            if mode=="nh":
-                t=time.perf_counter()
-                proposals,diagnostics=refiner.refine(x_ref,acquisition,problem,random.Random(seed+20000+iteration))
-                nh_seconds=time.perf_counter()-t
-                t=time.perf_counter()
-                x_selected,a_selected=accept_refinement(x_ref,a_ref,proposals,acquisition,
-                                                       lambda x:selector.valid(x,X,problem))
-                rescore_seconds=time.perf_counter()-t
-            delta=(a_ref-a_selected) if acquisition.direction=="min" else (a_selected-a_ref)
-            if delta < -1e-12:
-                raise AssertionError("Original acquisition worsened")
+            selected_batch=[]
+            diagnostics=[]
+            for batch_index, (x_ref, a_ref) in enumerate(reference_batch):
+                x_selected,a_selected=list(x_ref),a_ref
+                item_diagnostics={}
+                if mode=="nh":
+                    t=time.perf_counter()
+                    proposals,item_diagnostics=refiner.refine(
+                        x_ref,acquisition,problem,
+                        random.Random(seed+20000+iteration*len(reference_batch)+batch_index))
+                    nh_seconds+=time.perf_counter()-t
+                    t=time.perf_counter()
+                    occupied = X + [point for point,_ in selected_batch]
+                    x_selected,a_selected=accept_refinement(
+                        x_ref,a_ref,proposals,acquisition,
+                        lambda x:selector.valid(x,occupied,problem))
+                    rescore_seconds+=time.perf_counter()-t
+                delta=(a_ref-a_selected) if acquisition.direction=="min" else (a_selected-a_ref)
+                if delta < -1e-12:
+                    raise AssertionError("Original acquisition worsened")
+                selected_batch.append((list(x_selected),a_selected))
+                diagnostics.append(item_diagnostics)
             after=(acquisition.score_points,acquisition.energy_points,acquisition.gradient_points)
+            x_ref,a_ref=reference_batch[0]
+            x_selected,a_selected=selected_batch[0]
+            gain=sum(
+                (reference_score-selected_score)
+                if acquisition.direction=="min" else
+                (selected_score-reference_score)
+                for (_,reference_score),(_,selected_score)
+                in zip(reference_batch,selected_batch))
             rec={"iteration":iteration,"snapshot":model.snapshot,"mode":mode,"x_reference":x_ref,
                  "x_selected":x_selected,"a_reference":a_ref,"a_selected":a_selected,
-                 "acquisition_gain":delta,"candidate_seconds":candidate_seconds,"reference_seconds":reference_seconds,"nh_seconds":nh_seconds,
+                 "x_references":[point for point,_ in reference_batch],
+                 "x_selected_batch":[point for point,_ in selected_batch],
+                 "a_references":[score for _,score in reference_batch],
+                 "a_selected_batch":[score for _,score in selected_batch],
+                 "acquisition_gain":gain,"candidate_seconds":candidate_seconds,"reference_seconds":reference_seconds,"nh_seconds":nh_seconds,
                  "rescore_seconds":rescore_seconds,
                  "sampling_seconds":candidate_seconds+reference_seconds+nh_seconds+rescore_seconds,
                  "score_points":after[0]-before[0],"energy_points":after[1]-before[1],
@@ -155,15 +184,18 @@ class Pipeline:
                 totals[key]+=rec[key]
             for key in ("score_points","energy_points","gradient_points"):
                 totals["sampling_"+key]+=rec[key]
-            # Only selected point calls g. Shadow reference is not evaluated.
-            y=oracle.evaluate(x_selected,iteration+1,"selected")
-            X.append(list(x_selected));Y.append(y)
+            # Each selected point receives one stochastic simulator realization.
+            for x_selected,_ in selected_batch:
+                y=oracle.evaluate(x_selected,iteration+1,"selected")
+                X.append(list(x_selected));Y.append(y)
             iteration+=1
         exact=problem.exact_pf()
         summary={"profile":cfg["profile"],"mode":mode,"target":problem.target,
                  "implementation":"demonstration_not_paper_reproduction",
                  "nh_implementation":"prototype_replace_with_verified_user_module" if mode=="nh" else None,
-                 "n_true_calls":oracle.n_calls,"n_selected":len(records),"final":metrics,"exact_pf":exact,
+                 "n_true_calls":oracle.n_calls,
+                 "n_selected":oracle.n_calls-len(self.initial_points),
+                 "final":metrics,"exact_pf":exact,
                  "abs_pf_error":abs(metrics["pf_surrogate"]-exact) if exact is not None else None,
                  "true_seconds":oracle.total_seconds,**totals,"wall_seconds":time.perf_counter()-start_run+self.preparation_seconds}
         if oracle.n_calls < len(replay):
@@ -188,6 +220,8 @@ def prepare(cfg, mode):
     if mode not in ("reference", "nh"):
         raise ValueError("Unsupported mode")
     seed = int(cfg["seed"])
+    if cfg["problem"].get("type") == "stochastic_linear_uniform":
+        cfg["problem"].setdefault("response_seed", seed+66)
     problem = factory(cfg["problem"], cfg["problem"])
     model_cfg = dict(cfg["metamodel"])
     model_cfg.setdefault("seed", seed)

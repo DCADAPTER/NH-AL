@@ -99,6 +99,7 @@ original single-run output layout unless `--resume` is explicitly used.
 | configs/Kriging_GP.yaml | RBF GP with kernel fitting | U / audit U and MC COV |
 | configs/AK-MCS-U.yaml | Ordinary Kriging | U / `stop.AK-MCS-U:Stop` |
 | configs/AK-MCS-EFF.yaml | Ordinary Kriging | EFF / `stop.AK-MCS-EFF:Stop` |
+| configs/AL-SPCE.yaml | Stochastic SPCE | AL-SPCE / weighted K-medoids batch selection |
 | configs/SVM.yaml | RBF SVC | absolute decision margin / call budget |
 | configs/PCE.yaml | Hermite PCE with bootstrap | absolute predicted g / call budget |
 | configs/BNN.yaml | Variational BNN | posterior mean/std U / audit U and MC COV |
@@ -108,9 +109,27 @@ Each YAML is standalone, without implicit inheritance.
 `epsilon = 2 sigma`, maximizes EFF, and stops learning when
 `max(EFF) <= 0.001`; it also requires the configured MC coefficient-of-variation
 criterion. The U and EFF methods use separate stop plugins.
-Use profile=metamodel_demo for these implementations. P01-P30 remain literature
-specifications; they are not implemented paper reproductions.
+Use profile=metamodel_demo for these implementations. P01-P30 entries in
+papers.yaml remain literature specifications; the available method configs are
+not verified paper reproductions.
 The JSON-formatted YAML examples do not need a YAML parser. Block YAML uses PyYAML.
+
+`configs/AL-SPCE.yaml` is an executable stochastic demonstration of P26, not a
+reproduction of its application cases. It fits a stochastic PCE with a uniform
+latent response variable, maximizes `f_X(x) Var_ep[s_hat(x)]`, and selects up to
+five candidates per iteration using weighted K-medoids. `max_true_calls` is the
+only stopping rule: the paper identifies a robust learning-convergence threshold
+as unresolved. Batches are truncated to the remaining true-call budget. The
+example uses a small stochastic linear problem; the implementation currently
+requires independent standard-normal physical inputs and one uniform latent
+variable. On later fits, noise calibration searches five log-spaced candidates
+within +/-5% of the previous estimate; the initial fit estimates noise jointly.
+Use `metamodel.plugin: spce` or `metamodel.factory` to construct the model.
+Run the example with:
+
+```powershell
+python run.py --config configs/AL-SPCE.yaml --output runs/al_spce_demo
+```
 
 SVM needs both failure and safe observations; its example uses beta=0 while the
 other examples use beta=2.5. Align problems, initial designs, seeds, budgets and

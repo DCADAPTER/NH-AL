@@ -882,9 +882,9 @@
         "status": "proposed_extension"
       },
       "implementation": {
-        "status": "specification_only",
+        "status": "plugin_implementation",
         "paper_reproduction_verified": false,
-        "unverified": "원 stop·batch 수치; s(1-s)를 epistemic variance로 쓰지 않음."
+        "unverified": "실제 사례 재현; 원 noise 초기 calibration; 논문 미정 stop은 budget-only; s(1-s)를 epistemic variance로 쓰지 않음."
       }
     },
     {

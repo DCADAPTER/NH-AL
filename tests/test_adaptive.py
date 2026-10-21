@@ -1,9 +1,12 @@
 """Acquisition gradients and Reference/NH acceptance rules."""
 import unittest
 import math
-from adaptive import EFFAcquisition, UAcquisition, accept_refinement
+import numpy as np
+from adaptive import ALSPCEAcquisition, EFFAcquisition, UAcquisition, WeightedKMedoidsBatchSelector, accept_refinement
 from metamodels import create_metamodel
 from metamodels.contracts import Prediction
+from metamodels.spce import StochasticPCE
+from g import Problem
 
 
 class AdaptiveTests(unittest.TestCase):
@@ -52,6 +55,42 @@ class AdaptiveTests(unittest.TestCase):
                 lo[j]-=h;hi[j]+=h
                 numerical=(acq.energy(hi)-acq.energy(lo))/(2*h)
                 self.assertAlmostEqual(grad[j],numerical,delta=2e-4*max(1,abs(numerical)))
+
+    def test_al_spce_acquisition_gradient(self):
+        rng = np.random.default_rng(27)
+        x = rng.normal(size=(80, 1))
+        latent = rng.uniform(size=len(x))
+        y = .1 + .5*x[:, 0] + .4*(2*latent-1)
+        model = StochasticPCE({
+            "degree": 1, "coefficient_draws": 32,
+            "likelihood_quadrature_points": 24,
+            "failure_quadrature_points": 80,
+        })
+        model.fit(x, y)
+        acquisition = ALSPCEAcquisition(model)
+        point = [.1]
+        gradient = acquisition.energy_gradient(point)[0]
+        h = 1e-5
+        numerical = (acquisition.energy([point[0]+h]) -
+                     acquisition.energy([point[0]-h]))/(2*h)
+        self.assertAlmostEqual(gradient, numerical, delta=1e-5)
+        self.assertGreater(acquisition.score([0]), 0)
+
+    def test_weighted_kmedoids_selects_a_distinct_batch(self):
+        import numpy as np
+        class Scores:
+            direction = "max"
+            def score_many(self, points):
+                return np.asarray([x[0] for x in points])
+
+        points = [[0.0], [0.1], [4.0], [4.1], [8.0], [8.1]]
+        selector = WeightedKMedoidsBatchSelector(
+            {"batch_size": 3, "min_distance": .01})
+        selected = selector.select_batch(
+            points, Scores(), [], Problem({"type": "linear_normal", "dimension": 1}))
+        self.assertEqual(len(selected), 3)
+        self.assertEqual(len({tuple(x) for x, _ in selected}), 3)
+        self.assertTrue(all(point in points for point, _ in selected))
 
 
     def test_min_max_acceptance_and_constraint(self):

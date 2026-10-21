@@ -104,3 +104,11 @@ class ExperimentTests(unittest.TestCase):
             self.assertEqual(observations(path), [valid])
             path.write_text('{bad}\n'+json.dumps(valid), encoding='utf-8')
             with self.assertRaises(json.JSONDecodeError): observations(path)
+
+    def test_stochastic_response_seed_advances_per_repetition(self):
+        cfg = self.config()
+        cfg["problem"].update(type="stochastic_linear_uniform", response_seed=91)
+        first = repetition_config(cfg, 0)
+        second = repetition_config(cfg, 1)
+        self.assertEqual(first["problem"]["response_seed"], 91)
+        self.assertEqual(second["problem"]["response_seed"], 100091)

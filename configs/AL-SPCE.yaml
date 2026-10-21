@@ -1,0 +1,80 @@
+# P26: active learning with a stochastic polynomial chaos expansion.
+# The included simulator is a small stochastic smoke-test problem, not a
+# reproduction of any of the paper's three application case studies.
+profile: metamodel_demo
+mode: reference
+seed: 20261021
+output: runs/AL-SPCE
+reference:
+  id: P26
+  name: AL-SPCE
+  doi: arXiv:2507.04553
+  source_pdf: 'citations/P26 AL-SPCE.pdf'
+  implementation: stochastic_spce_active_learning_demo
+  paper_reproduction_verified: false
+  deviations:
+    - The included simulator is stochastic_linear_uniform, not a paper case study.
+    - Initial noise calibration is joint MLE; later updates follow the paper's five log-spaced candidates within +/-5%.
+    - The paper leaves a robust convergence threshold open; this configuration stops at the true-call budget.
+problem:
+  factory: g:Problem
+  type: stochastic_linear_uniform
+  dimension: 2
+  beta: 1.0
+  latent_half_width: 0.6
+  response_seed: 20261087
+  search_bound: null
+initial_design:
+  size: 30
+  method: random_from_mc_population
+  seed: 20261032
+  input_file: null
+metamodel:
+  factory: metamodels.spce:StochasticPCE
+  degree: 2
+  max_terms: 2000
+  likelihood_quadrature_points: 24
+  failure_quadrature_points: 48
+  coefficient_draws: 32
+  optimizer_maxiter: 300
+  noise_candidates: 5
+  initial_noise_fraction: 0.2
+  noise_damping_fraction: 0.05
+  information_floor: 1.0e-8
+  seed: 20261015
+acquisition:
+  factory: adaptive:ALSPCEAcquisition
+  type: AL-SPCE
+  direction: max
+sampling:
+  factory: adaptive:WeightedKMedoidsBatchSelector
+  batch_size: 5
+  max_iterations: 20
+  pool_size: 256
+  min_distance: 1.0e-6
+nh:
+  factory: nh:NestedHamiltonianPrototype
+  status: proposed_extension_not_part_of_P26
+  dt: 0.03
+  steps: 15
+  max_paths: 4
+  max_depth: 1
+  max_retries: 6
+  mass: 1
+  temperature: 0.2
+  energy_tolerance: 0.001
+  child:
+    method: lbfgsb
+    radius: 0.5
+    maxiter: 30
+    maxfun: 80
+    maxls: 20
+    ftol: 1.0e-12
+    gtol: 1.0e-6
+evaluation:
+  factory: evaluation:ALSPCEEvaluation
+  integration_size: 2000
+  audit_size: 1
+  max_true_calls: 100
+  stop:
+    factory: stop.AL-SPCE:Stop

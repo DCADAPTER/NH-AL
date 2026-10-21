@@ -106,3 +106,60 @@ class PluginMCEvaluation(BudgetMCEvaluation):
         return {**metrics, **decision, "population_size": len(self.integration),
                 "stop_plugin": self.cfg["stop"]["factory"],
                 "evaluation_seconds": time.perf_counter() - start}
+
+
+class ALSPCEEvaluation(BudgetMCEvaluation):
+    """Estimate Pf from conditional failure probabilities; budget-only stopping."""
+    supported_acquisition_kinds = frozenset({"al_spce"})
+
+    def __init__(self, cfg, integration, audit):
+        super().__init__(cfg, integration, audit)
+        spec = cfg["stop"]
+        module, name = spec["factory"].split(":")
+        self.stop_plugin = getattr(importlib.import_module(module), name)(spec)
+        self.required_capabilities = self.stop_plugin.required_capabilities
+        self.supported_acquisition_kinds = self.stop_plugin.supported_acquisition_kinds
+        self.requires_shared_population = getattr(
+            self.stop_plugin, "requires_shared_population", False)
+        self.requires_independent_population = getattr(
+            self.stop_plugin, "requires_independent_population", False)
+        self.pf_history = []
+
+    def evaluate(self, model, acquisition, n_calls):
+        if acquisition.kind not in self.supported_acquisition_kinds:
+            raise CompatibilityError("ALSPCEEvaluation requires AL-SPCE acquisition")
+        start = time.perf_counter()
+        point_probabilities = model.conditional_failure_probability_many(
+            self.integration)
+        coefficient_draws = model.conditional_failure_draws_many(self.integration)
+        pf = float(point_probabilities.mean())
+        integration_se = (
+            float(point_probabilities.std(ddof=1) / math.sqrt(len(point_probabilities)))
+            if len(point_probabilities) > 1 else None)
+        pf_draws = coefficient_draws.mean(axis=0)
+        epistemic_sd = (
+            float(pf_draws.std(ddof=1)) if len(pf_draws) > 1 else None)
+        self.pf_history.append(pf)
+        smoothed = float(sum(self.pf_history[-3:]) / len(self.pf_history[-3:]))
+        cov = integration_se / pf if integration_se is not None and pf > 0 else None
+        metrics = {
+            "pf_surrogate": pf,
+            "pf_surrogate_smoothed_3": smoothed,
+            "mc_se_conditional_on_model": integration_se,
+            "mc_cov": cov,
+            "pf_epistemic_sd": epistemic_sd,
+        }
+        decision = self.stop_plugin.evaluate(
+            model, acquisition, self.integration, metrics)
+        budget = n_calls >= self.cfg["max_true_calls"]
+        decision.update(
+            converged=False,
+            stop=bool(budget),
+            stop_reason="budget_exhausted" if budget else "continue",
+        )
+        return {
+            **metrics,
+            **decision,
+            "stop_plugin": self.cfg["stop"]["factory"],
+            "evaluation_seconds": time.perf_counter() - start,
+        }

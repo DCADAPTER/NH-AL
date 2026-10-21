@@ -119,6 +119,57 @@ class EFFAcquisition:
         return gradient.tolist()
 
 
+class ALSPCEAcquisition:
+    """P26 learning function: input density times epistemic Var[s_hat(x)]."""
+    direction = "max"
+    kind = "al_spce"
+    capabilities = frozenset({"score", "score_many", "energy", "energy_gradient"})
+    required_capabilities = frozenset({"mean", "epistemic_variance"})
+    gradient_required_capabilities = frozenset({
+        "mean_gradient", "epistemic_variance_gradient"})
+    gradient_kind = "analytic_energy_negative_al_spce"
+
+    def __init__(self, model):
+        self.model = model
+        self.score_points = self.energy_points = self.gradient_points = 0
+
+    def _score(self, x):
+        draws = self.model.conditional_failure_draws(x)
+        variance = float(draws.var(ddof=1))
+        density = float(self.model.input_pdf([x])[0])
+        return density * variance
+
+    def score(self, x):
+        self.score_points += 1
+        return self._score(x)
+
+    def score_many(self, X):
+        import numpy as np
+        points = np.asarray(X, dtype=float)
+        draws = self.model.conditional_failure_draws_many(points)
+        self.score_points += len(points)
+        return self.model.input_pdf(points) * draws.var(axis=1, ddof=1)
+
+    def energy(self, x):
+        self.energy_points += 1
+        return -self._score(x)
+
+    def energy_gradient(self, x):
+        import numpy as np
+        self.gradient_points += 1
+        draws, draw_gradients = self.model.conditional_failure_draws(
+            x, gradient=True)
+        mean = float(draws.mean())
+        variance = float(draws.var(ddof=1))
+        variance_gradient = (
+            2.0 * np.sum((draws-mean)[:, None] * draw_gradients, axis=0)
+            / (len(draws)-1))
+        density = float(self.model.input_pdf([x])[0])
+        score_gradient = density * (
+            variance_gradient - np.asarray(x, dtype=float) * variance)
+        return (-score_gradient).tolist()
+
+
 class MeanBoundaryAcquisition:
     """Minimal |predicted g| baseline; no uncertainty-based convergence claim."""
     direction = "min"
@@ -203,3 +254,80 @@ class BatchedPoolSelector(PoolSelector):
             raise ValueError("Acquisition scores must be finite")
         index = np.argmin(scores) if acquisition.direction == "min" else np.argmax(scores)
         return eligible[index].tolist(), float(scores[index])
+
+
+class WeightedKMedoidsBatchSelector(PoolSelector):
+    """Weighted K-medoids candidate clustering for AL-SPCE batch enrichment."""
+    def __init__(self, cfg):
+        super().__init__(cfg)
+        self.batch_size = int(cfg.get("batch_size", 5))
+        self.max_iterations = int(cfg.get("max_iterations", 20))
+        if self.batch_size < 1 or self.max_iterations < 1:
+            raise ValueError("batch_size and max_iterations must be positive")
+
+    def select(self, candidates, acquisition, X, problem):
+        return self.select_batch(candidates, acquisition, X, problem, 1)[0]
+
+    def select_batch(self, candidates, acquisition, X, problem, batch_size=None):
+        import numpy as np
+        from scipy.spatial.distance import cdist
+
+        points = np.asarray(candidates, dtype=float)
+        valid = np.asarray([problem.admissible(x) for x in points])
+        if len(X):
+            from scipy.spatial import cKDTree
+            distances, _ = cKDTree(X).query(points)
+            valid &= distances > self.min_distance
+        eligible = points[valid]
+        if not len(eligible):
+            raise RuntimeError("No eligible candidate; not convergence")
+        scores = np.asarray(acquisition.score_many(eligible), dtype=float)
+        if scores.shape != (len(eligible),) or not np.isfinite(scores).all() or np.any(scores < 0):
+            raise ValueError("Batch acquisition scores must be finite and nonnegative")
+        count = min(batch_size or self.batch_size, len(eligible))
+        if count == 1:
+            index = int(np.argmax(scores) if acquisition.direction == "max"
+                        else np.argmin(scores))
+            return [(eligible[index].tolist(), float(scores[index]))]
+
+        weights = scores.copy()
+        if not np.isfinite(weights.sum()) or weights.sum() <= 0:
+            weights.fill(1.0)
+        weights /= weights.sum()
+        distances = cdist(eligible, eligible)
+        medoids = [int(np.argmax(weights))]
+        while len(medoids) < count:
+            nearest = np.min(distances[:, medoids], axis=1)
+            potential = weights * nearest**2
+            potential[medoids] = -1
+            next_medoid = int(np.argmax(potential))
+            if potential[next_medoid] <= 0:
+                next_medoid = next(i for i in range(len(eligible)) if i not in medoids)
+            medoids.append(next_medoid)
+
+        for _ in range(self.max_iterations):
+            assignments = np.argmin(distances[:, medoids], axis=1)
+            updated = list(medoids)
+            for cluster in range(count):
+                members = np.flatnonzero(assignments == cluster)
+                if not len(members):
+                    continue
+                costs = distances[np.ix_(members, members)] @ weights[members]
+                updated[cluster] = int(members[int(np.argmin(costs))])
+            if updated == medoids:
+                break
+            medoids = updated
+
+        assignments = np.argmin(distances[:, medoids], axis=1)
+        chosen = []
+        for cluster in range(count):
+            members = np.flatnonzero(assignments == cluster)
+            if not len(members):
+                continue
+            local = scores[members]
+            index = int(members[np.argmax(local) if acquisition.direction == "max"
+                                 else np.argmin(local)])
+            chosen.append((eligible[index].tolist(), float(scores[index])))
+        if len(chosen) != count:
+            raise RuntimeError("Weighted K-medoids produced an empty batch cluster")
+        return chosen

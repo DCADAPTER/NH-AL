@@ -4,6 +4,7 @@ import numpy as np
 
 from metamodels import Prediction, Metamodel, CompatibilityError, create_metamodel
 from metamodels.bnn import BayesianNeuralNetwork
+from metamodels.spce import StochasticPCE
 
 
 class MetamodelTests(unittest.TestCase):
@@ -165,7 +166,44 @@ class MetamodelTests(unittest.TestCase):
         with self.assertRaises(CompatibilityError):
             self.models["pce"].validate_problem(OtherProblem())
 
+    def test_stochastic_pce_conditional_failure_and_gradients(self):
+        rng = np.random.default_rng(27)
+        x = rng.normal(size=(80, 1))
+        latent = rng.uniform(0.0, 1.0, len(x))
+        y = .1 + .5*x[:, 0] + .4*(2*latent-1)
+        model = StochasticPCE({
+            "degree": 1,
+            "coefficient_draws": 32,
+            "likelihood_quadrature_points": 24,
+            "failure_quadrature_points": 80,
+        })
+        model.fit(x, y)
+        probability = model.conditional_failure_probability([.1])
+        self.assertAlmostEqual(probability, .3125, delta=.08)
+        draws, gradients = model.conditional_failure_draws([.1], gradient=True)
+        self.assertEqual(draws.shape, (32,))
+        self.assertEqual(gradients.shape, (32, 1))
+        self.assertTrue(np.isfinite(model.coefficient_covariance).all())
+        self.assertGreaterEqual(np.linalg.eigvalsh(model.coefficient_covariance).min(), 0)
+
+        prediction = model.predict([.1], gradient=True)
+        h = 1e-5
+        numerical = (model.predict([.1+h]).mean-model.predict([.1-h]).mean)/(2*h)
+        self.assertAlmostEqual(prediction.mean_gradient[0], numerical, delta=1e-5)
+
+    def test_stochastic_pce_requires_stochastic_simulator(self):
+        self.assertIsInstance(
+            create_metamodel({"plugin": "spce"}), StochasticPCE)
+
+        class DeterministicProblem:
+            d = 1
+            input_distribution = "standard_normal_independent"
+            stochastic_response = False
+
+        model = StochasticPCE({"degree": 1})
+        with self.assertRaisesRegex(CompatibilityError, "stochastic response"):
+            model.validate_problem(DeterministicProblem())
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
-
