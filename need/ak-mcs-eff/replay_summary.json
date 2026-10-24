@@ -1,0 +1,37 @@
+{
+  "run_data_dir": "C:\\Users\\user\\Desktop\\LAB\\NH-AL\\NH-AL\\runs\\AK-MCS-EFF\\rep_001\\reference",
+  "iteration": 2,
+  "model_snapshot": "233f376fa19a8345ae2b",
+  "problem": {
+    "factory": "g:Problem",
+    "type": "rastrigin",
+    "dimension": 2,
+    "search_bound": null
+  },
+  "metamodel_factory": "metamodels.ordinary_kriging:OrdinaryKriging",
+  "theta": [
+    0.10511205190671428,
+    9.513656920021763
+  ],
+  "training_samples": 12,
+  "acquisition": {
+    "factory": "adaptive:EFFAcquisition",
+    "type": "EFF",
+    "direction": "max"
+  },
+  "acquisition_direction": "max",
+  "mc_samples_per_repetition": 1000000,
+  "repetitions": 100,
+  "random_seed": 42,
+  "best_acquisition": {
+    "mean": 6.211743586547036,
+    "std": 0.09473748696488797,
+    "median": 6.152237755799081,
+    "q1": 6.152236743343928,
+    "q3": 6.242970508706999,
+    "iqr": 0.09073376536307087,
+    "min": 6.152228007601663,
+    "max": 6.543263488312673
+  },
+  "elapsed_seconds": 88.57571879995521
+}

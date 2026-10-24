@@ -1,0 +1,36 @@
+{
+  "run_data_dir": "C:\\Users\\user\\Desktop\\LAB\\NH-AL\\NH-AL\\runs\\repeated_01\\rep_001\\reference",
+  "iteration": 2,
+  "model_snapshot": "d8a540e3691dbd03558d",
+  "problem": {
+    "factory": "g:Problem",
+    "type": "rastrigin",
+    "dimension": 2,
+    "search_bound": null
+  },
+  "metamodel_factory": "metamodels.ordinary_kriging:OrdinaryKriging",
+  "theta": [
+    2.8284271247461903,
+    7.3360323456373715
+  ],
+  "training_samples": 12,
+  "acquisition": {
+    "factory": "adaptive:UAcquisition",
+    "type": "U",
+    "direction": "min"
+  },
+  "mc_samples_per_repetition": 1000000,
+  "repetitions": 100,
+  "random_seed": 42,
+  "minimum_u": {
+    "mean": 3.713028492080284e-05,
+    "std": 4.133775530813805e-05,
+    "median": 2.267243294855191e-05,
+    "q1": 9.26062781969077e-06,
+    "q3": 5.315664168342333e-05,
+    "iqr": 4.389601386373256e-05,
+    "min": 2.1836700873635723e-07,
+    "max": 0.00020605262286102027
+  },
+  "elapsed_seconds": 14.526537100085989
+}
